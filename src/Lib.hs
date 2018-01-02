@@ -4,6 +4,11 @@ module Lib
       onlyGapless,
       differences,
       getRuns,
+      getRunsA,
+      getRunsB,
+      getRuns',
+      getRuns'A,
+      getRuns'B,
       addPosition,
       theStream,
       printMap,
@@ -11,12 +16,14 @@ module Lib
       realMain
     ) where
 
-import Control.Monad (foldM_)
+-- import Control.Monad (foldM_)
 import Data.Bits ((.&.), unsafeShiftR)
 import Foreign.C.Types (CULLong)
 import qualified Data.Map.Strict as Map
-import Timers (foldrTimes, foldlOnce, sideEffectEveryN)
+import Timers (foldlOnce, sideEffectEveryN) -- foldrTimes,
 import System.Environment (getArgs)
+
+
 
 type ULL = CULLong
 type Map = Map.Map
@@ -50,21 +57,51 @@ onlyGapless = filter gapless
 differences ::         [ULL] -> [ULL]
 differences = zipWith (-) =<< tail
 
+-- | Warning, this function is incomplete.
 getRuns  ::            [ULL] -> [ULL]
 getRuns    (1:xs) =     getRuns        xs
-getRuns    (x:xs) =     getRuns'  1    xs
+getRuns    (_:xs) =     getRuns'  1    xs
+getRuns     _     = error "getRuns: [] is undefined"
 
+-- | A "match [] first" version of `getRuns`
+getRunsA  ::            [ULL] -> [ULL]
+getRunsA      []    =     []
+getRunsA     (1:xs) =     getRunsA        xs
+getRunsA    ~(_:xs) =     getRuns'A  1    xs
+
+-- | A "match [] last" version of `getRuns`
+getRunsB  ::            [ULL] -> [ULL]
+getRunsB    (1:xs) =     getRunsB        xs
+getRunsB    (_:xs) =     getRuns'B  1    xs
+getRunsB     _     =     []
+
+
+-- | Warning, this function is incomplete.
 getRuns' :: ULL -> [ULL] -> [ULL]
 getRuns' n (1:xs) = n : getRuns        xs
 getRuns' n (_:xs) =     getRuns' (n+1) xs
+getRuns' _  _     = error "getRuns' _ [] is undefined"
+
+-- | A "match [] first" version of `getRuns'`
+getRuns'A :: ULL -> [ULL] -> [ULL]
+getRuns'A _   []    = []
+getRuns'A n  (1:xs) = n : getRunsA        xs
+getRuns'A n ~(_:xs) =     getRuns'A (n+1) xs
+
+-- | A "match [] last" version of `getRuns'`
+getRuns'B :: ULL -> [ULL] -> [ULL]
+getRuns'B n (1:xs) = n : getRunsB        xs
+getRuns'B n (_:xs) =     getRuns'B (n+1) xs
+getRuns'B _  _     = []
 
 
-
+-- | More readable (and specialized) than @zip [0..]@
 notePosition :: [ULL] -> [(ULL, ULL)]
-notePosition = zip [0..]
+notePosition = (zip [0..] :: (Enum a, Num a) => [b] -> [(a, b)])
 
---             position  value               value    lst pos   lst pos2 lst pos3 lst pos4   list of runs
-addPosition :: (ULL,ULL) -> Map ULL ((ULL,ULL,ULL,ULL,ULL),[(ULL,ULL,ULL,ULL,ULL)]) -> Map ULL ((ULL,ULL,ULL,ULL,ULL),[(ULL,ULL,ULL,ULL,ULL)])
+addPosition :: (ULL, ULL)                                              -- ^ (position, value)
+            -> Map ULL ((ULL,ULL,ULL,ULL,ULL),[(ULL,ULL,ULL,ULL,ULL)]) -- ^ Map Value (last input position, list of its previous runs)
+            -> Map ULL ((ULL,ULL,ULL,ULL,ULL),[(ULL,ULL,ULL,ULL,ULL)]) -- ^ Map Value (new  input position, list of its previous runs)
 addPosition (position, value) posMap = Map.insertWith posValInsert value ((position,0,0,0,0),[]) posMap
 
 
@@ -76,8 +113,13 @@ posValInsert ((pos6,_,_,_,_),_) ((pos1,pos2,pos3,pos4,pos5), pastRuns) = if newR
                                                                             then (positions,          pastRuns)
                                                                             else (positions, newRun : pastRuns)
   where
+    newRun    :: (ULL, ULL, ULL, ULL, ULL)
     newRun    = (pos2-pos1,pos3-pos2,pos4-pos3,pos5-pos4,pos6-pos5)
+
+    positions :: (ULL, ULL, ULL, ULL, ULL)
     positions = (pos2     ,pos3     ,pos4     ,pos5     ,pos6     )
+
+
 -- posValInsert ((pos5,_,_,_),_) ((pos1,pos2,pos3,pos4), pastRuns) = if newRun `elem` pastRuns
 --                                                          then (positions,          pastRuns)
 --                                                          else (positions, newRun : pastRuns)
@@ -102,19 +144,21 @@ printMap = putStrLn . Map.showTreeWith (\k x -> show (k, snd x)) True False . sn
 theStream :: ([(ULL, ULL)], Lib.Map k a1)
 theStream = baseMap . notePosition . getRuns . differences . onlyGapless $ streamTail
 
-returnEveryN :: Int -> IO ([(ULL, ULL)], Map ULL ((ULL, ULL, ULL, ULL, ULL), [(ULL, ULL, ULL, ULL, ULL)]))
-returnEveryN n = sideEffectEveryN printMap (foldlOnce addPosition) n theStream
-
-realMain = do
-  args <- getArgs
-  let arg = if null args then (error "no arguements passed! Please provide a somewhat large number.") else head args
-  returns <- returnEveryN (read arg :: Int)
-  print $ returns
 
 
 -- returnEveryN n = printMapEveryN (foldlOnce addPosition) n theStream
 
 -- returnEveryN n = printEveryN (foldlOnce addPosition) n theStream
+
+returnEveryN :: Int -> IO ([(ULL, ULL)], Map ULL ((ULL, ULL, ULL, ULL, ULL), [(ULL, ULL, ULL, ULL, ULL)]))
+returnEveryN n = sideEffectEveryN printMap (foldlOnce addPosition) n theStream
+
+realMain :: IO ()
+realMain = do
+  args <- getArgs
+  let arg = if null args then (error "no arguements passed! Please provide a somewhat large number.") else head args
+  returns <- returnEveryN (read arg :: Int)
+  print $ returns
 
 
 
@@ -124,4 +168,7 @@ realMain = do
 -- put positions of n's into map
 -- convert list of positions into runs of 5 (7)?
 -- nub the runs
+
+
+
 

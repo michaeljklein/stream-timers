@@ -12,6 +12,7 @@ module Timers
       switchByPred,
       switchOnM,
       switchEveryN,
+      fixPt,
       printEveryN,
       sideEffectEveryN
     ) where
@@ -44,7 +45,7 @@ nestMForever f x = foldM ((. const) . (.) $ f) x (repeat id)
 
 -- | `foldrOnce` applies a right fold, only once (for streams, primarily).
 foldrOnce :: (a -> b -> a) -> (a, [b]) -> (a, [b])
-foldrOnce f (x, []    ) = (  x  , [])
+foldrOnce _ (x, []    ) = (  x  , [])
 foldrOnce f (x, y : zs) = (f x y, zs)
 
 -- | `foldrTimes` applies `foldrOnce` a given number of times.
@@ -53,7 +54,7 @@ foldrTimes = nest . foldrOnce
 
 -- | `foldlOnce` is the left-associative version of `foldrOnce`.
 foldlOnce :: (a -> b -> b) -> ([a], b) -> ([a], b)
-foldlOnce f ([]    , x) = ([],     x)
+foldlOnce _ ([]    , x) = ([],     x)
 foldlOnce f (y : zs, x) = (zs, f y x)
 
 -- | See `foldlOnce`, `foldrTimes`.
@@ -62,7 +63,7 @@ foldlTimes = nest . foldlOnce
 
 -- | `foldrOnceM` generalizes `foldrOnceM` to general monads.
 foldrOnceM :: Monad m => (a -> b -> a) -> (a, [b]) -> m (a, [b])
-foldrOnceM f (x, []) = return (x, [])
+foldrOnceM _ (x, []) = return (x, [])
 foldrOnceM f (x, y:zs) = return (f x y, zs)
 
 -- | See `foldrOnceM`, `foldrTimes`.
@@ -71,7 +72,7 @@ foldrTimesM = nestM . foldrOnceM
 
 -- | See `foldrOnceM`, `foldlOnce`.
 foldlOnceM :: Monad m => (t1 -> t -> t) -> ([t1], t) -> m ([t1], t)
-foldlOnceM f ([]    , x) = return ([],     x)
+foldlOnceM _ ([]    , x) = return ([],     x)
 foldlOnceM f (y:zs, x) = return (zs, f y x)
 
 -- | See `foldrTimesM`, `foldlOnceM`,
