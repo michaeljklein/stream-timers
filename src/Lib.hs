@@ -4,6 +4,10 @@ module Lib
     ( ULL,
       Map,
       gapless,
+      gapless',
+      gaplessEq,
+      countGapless,
+      countGapless',
       nextGapless,
       onlyGapless,
       differences,
@@ -17,17 +21,15 @@ module Lib
       theStream,
       printMap,
       printEveryNOfStream,
-      returnEveryN,
-      realMain
+      returnEveryN
     ) where
 
--- import Control.Monad (foldM_)
+
 import Data.Bits ((.&.), unsafeShiftR)
 import Foreign.C.Types (CULLong)
 import qualified Data.Map.Strict as Map
 import Timers (foldlOnce, sideEffectEveryN, printEveryN) -- foldrTimes,
-import System.Environment (getArgs)
-
+import Control.Monad (liftM2)
 
 
 type ULL = CULLong
@@ -50,16 +52,33 @@ gapless' z = if z == 0
                 then False
                 else gapless' $ unsafeShiftR z 2
 
+gaplessEq :: ULL -> Bool
+gaplessEq = liftM2 (==) gapless gapless'
+
+countGapless :: Num a => ULL -> a
+countGapless n = sum [ sum [ 1 | gapless i] | i<-[1..n]]
+
+countGapless' :: Num a => ULL -> a
+countGapless' n = sum [ sum [ 1 | gapless' i] | i<-[1..n]]
+
+
+
+
+
 nextGapless :: ULL -> ULL
 nextGapless = until gapless (+1)
 
 streamTail ::          [ULL]
 streamTail = [1..]
 
+-- | one-liner to export gapless to mathematica:
+-- @
+--  concatMap (\x->concat["{",show(head x),",",show(length x),"},"]).group . (\x->zipWith(-)(tail x)x) . onlyGapless $ [1..100]
+-- @
 onlyGapless ::         [ULL] -> [ULL]
 onlyGapless = filter gapless
 
-differences ::         [ULL] -> [ULL]
+differences :: Num a => [a] -> [a]
 differences = zipWith (-) =<< tail
 
 -- | Warning, this function is incomplete.
@@ -135,8 +154,6 @@ posValInsert ((pos6,_,_,_,_),_) ((pos1,pos2,pos3,pos4,pos5), pastRuns) = if newR
 
 
 
-baseMap :: a -> (a, Map k a1)
-baseMap = flip (,) emptyMap
 
 printMap :: forall a1 a. (a1, Map ULL (a, [(ULL, ULL, ULL, ULL, ULL)])) -> IO ()
 printMap = putStrLn . Map.showTreeWith (\k x -> show (k, snd x)) True False . snd
@@ -150,6 +167,9 @@ printMap = putStrLn . Map.showTreeWith (\k x -> show (k, snd x)) True False . sn
 
 theStream :: ([(ULL, ULL)], Lib.Map k a1)
 theStream = baseMap . notePosition . getRuns . differences . onlyGapless $ streamTail
+  where
+    baseMap :: a -> (a, Map k' a1')
+    baseMap = flip (,) emptyMap
 
 
 printEveryNOfStream :: Int -> IO ([(Lib.ULL, Lib.ULL)], Lib.Map Lib.ULL ((Lib.ULL, Lib.ULL, Lib.ULL, Lib.ULL, Lib.ULL), [(Lib.ULL, Lib.ULL, Lib.ULL, Lib.ULL, Lib.ULL)]))
@@ -157,14 +177,6 @@ printEveryNOfStream n = printEveryN (foldlOnce addPosition) n theStream
 
 returnEveryN :: Int -> IO ([(ULL, ULL)], Map ULL ((ULL, ULL, ULL, ULL, ULL), [(ULL, ULL, ULL, ULL, ULL)]))
 returnEveryN n = sideEffectEveryN printMap (foldlOnce addPosition) n theStream
-
-realMain :: IO ()
-realMain = do
-  args <- getArgs
-  let arg = if null args then (error "no arguements passed! Please provide a somewhat large number.") else head args
-  returns <- returnEveryN (read arg :: Int)
-  print $ returns
-
 
 
 -- get runs of 1's, 4^n's

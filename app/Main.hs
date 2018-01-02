@@ -1,9 +1,16 @@
 module Main where
 
 import Lib
--- import Timers
+import System.Environment (getArgs)
+
 
 main :: IO ()
--- main = print $ sum[sum[1|gapless i]|i<-[1..100000000]]
-main = realMain
+main = do
+  args <- getArgs
+  let arg = if null args
+              then error "No arguements passed! Please provide a somewhat large number."
+              else read (head args)
+  returns <- returnEveryN arg
+  print $ returns
+
 
