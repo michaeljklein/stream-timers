@@ -1,5 +1,9 @@
+{-# LANGUAGE RankNTypes #-}
+
 module Lib
-    ( gapless,
+    ( ULL,
+      Map,
+      gapless,
       nextGapless,
       onlyGapless,
       differences,
@@ -12,6 +16,7 @@ module Lib
       addPosition,
       theStream,
       printMap,
+      printEveryNOfStream,
       returnEveryN,
       realMain
     ) where
@@ -20,7 +25,7 @@ module Lib
 import Data.Bits ((.&.), unsafeShiftR)
 import Foreign.C.Types (CULLong)
 import qualified Data.Map.Strict as Map
-import Timers (foldlOnce, sideEffectEveryN) -- foldrTimes,
+import Timers (foldlOnce, sideEffectEveryN, printEveryN) -- foldrTimes,
 import System.Environment (getArgs)
 
 
@@ -104,7 +109,15 @@ addPosition :: (ULL, ULL)                                              -- ^ (pos
             -> Map ULL ((ULL,ULL,ULL,ULL,ULL),[(ULL,ULL,ULL,ULL,ULL)]) -- ^ Map Value (new  input position, list of its previous runs)
 addPosition (position, value) posMap = Map.insertWith posValInsert value ((position,0,0,0,0),[]) posMap
 
-
+-- Some code, I believe an alternate attempt/pseudocode/practice
+-- @
+-- posValInsert ((pos5,_,_,_),_) ((pos1,pos2,pos3,pos4), pastRuns) = if newRun `elem` pastRuns
+--                                                          then (positions,          pastRuns)
+--                                                          else (positions, newRun : pastRuns)
+--   where
+--     newRun    = (pos1,pos2,pos3,pos4,pos5)
+--     positions = (     pos2,pos3,pos4,pos5)
+-- @
 posValInsert :: ((ULL,ULL,ULL,ULL,ULL),[(ULL,ULL,ULL,ULL,ULL)]) ->
                 ((ULL,ULL,ULL,ULL,ULL),[(ULL,ULL,ULL,ULL,ULL)]) ->
                 ((ULL,ULL,ULL,ULL,ULL),[(ULL,ULL,ULL,ULL,ULL)])
@@ -120,24 +133,18 @@ posValInsert ((pos6,_,_,_,_),_) ((pos1,pos2,pos3,pos4,pos5), pastRuns) = if newR
     positions = (pos2     ,pos3     ,pos4     ,pos5     ,pos6     )
 
 
--- posValInsert ((pos5,_,_,_),_) ((pos1,pos2,pos3,pos4), pastRuns) = if newRun `elem` pastRuns
---                                                          then (positions,          pastRuns)
---                                                          else (positions, newRun : pastRuns)
---   where
---     newRun    = (pos1,pos2,pos3,pos4,pos5)
---     positions = (     pos2,pos3,pos4,pos5)
 
 
 baseMap :: a -> (a, Map k a1)
 baseMap = flip (,) emptyMap
 
-printMap :: (a1, Map ULL (a, [(ULL, ULL, ULL, ULL, ULL)])) -> IO ()
+printMap :: forall a1 a. (a1, Map ULL (a, [(ULL, ULL, ULL, ULL, ULL)])) -> IO ()
 printMap = putStrLn . Map.showTreeWith (\k x -> show (k, snd x)) True False . snd
 
 ----- Ahhhhh need differences in positions of differences..
 
---getRuns $ differences $ onlyGapless $ [1..]
--- ^ this is what to extract positions of 1s, 2s.. and then take the differences of those positions and store those runs...
+-- getRuns $ differences $ onlyGapless $ [1..]
+--  ^ this is what to extract positions of 1s, 2s.. and then take the differences of those positions and store those runs...
 
 
 
@@ -145,10 +152,8 @@ theStream :: ([(ULL, ULL)], Lib.Map k a1)
 theStream = baseMap . notePosition . getRuns . differences . onlyGapless $ streamTail
 
 
-
--- returnEveryN n = printMapEveryN (foldlOnce addPosition) n theStream
-
--- returnEveryN n = printEveryN (foldlOnce addPosition) n theStream
+printEveryNOfStream :: Int -> IO ([(Lib.ULL, Lib.ULL)], Lib.Map Lib.ULL ((Lib.ULL, Lib.ULL, Lib.ULL, Lib.ULL, Lib.ULL), [(Lib.ULL, Lib.ULL, Lib.ULL, Lib.ULL, Lib.ULL)]))
+printEveryNOfStream n = printEveryN (foldlOnce addPosition) n theStream
 
 returnEveryN :: Int -> IO ([(ULL, ULL)], Map ULL ((ULL, ULL, ULL, ULL, ULL), [(ULL, ULL, ULL, ULL, ULL)]))
 returnEveryN n = sideEffectEveryN printMap (foldlOnce addPosition) n theStream

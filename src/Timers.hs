@@ -12,13 +12,19 @@ module Timers
       switchByPred,
       switchOnM,
       switchEveryN,
+      switchEveryM,
       fixPt,
       printEveryN,
-      sideEffectEveryN
+      sideEffectEveryN,
+      switchEvery',
+      switchEvery''
     ) where
+
 
 import Control.Monad (foldM, liftM, liftM2)
 import Data.Time.Clock (UTCTime, getCurrentTime, utctDayTime, diffUTCTime)
+import Data.Void
+
 
 -- reallyNoWay                             :: Eq a => (a -> a) -> a -> a
 -- reallyNoWay = (\f x -> if f x == x then x else fix f)
@@ -134,24 +140,25 @@ sideEffectEveryN s f = switchEveryN f ((liftM2 (>>) s return) . f)
 
 
 -- | seconds taken to be in [1..59]. This returns fElse of the input if the clock time's minutes == minutes, otherwise f x.
--- switchEvery  :: Int -> Int -> (a -> m a) -> (a -> m a) -> a -> m b
--- switchEvery goalTime iterations f fElse x = do
---   currentTime <- getCurrentTime
---   let x0 = return x
---   return switchEvery' (currentTime, goalTime, iterations) f fElse x0
+-- Note that this function results in an infinite loop
+switchEveryM  :: Int -> Int -> (a -> IO a) -> (a -> IO a) -> a -> IO Void
+switchEveryM goalTime iterations f fElse x = do
+  currentTime <- getCurrentTime
+  loop currentTime iterations (return x)
+    where
+      loop lastTime lastNumIter x0 = do
+        currentTime   <- getCurrentTime
+        let timeDiff  =  diffUTCTime currentTime lastTime
+        let meanTime  =  timeDiff / (fromIntegral lastNumIter)
+        let newIter   =  round $ fromIntegral goalTime / meanTime
+        x1            <- x0
+        x2            <- fElse x1
+        x3            <- nestM f x2 newIter
+        loop currentTime newIter (return x3)
 
--- switchEvery' :: Integral b => (UTCTime, b, b) -> (a -> m a) -> (a -> m a) -> m a -> m b
--- switchEvery' (lastTime, goalTime, lastNumIter) f fElse x0 = do
---   currentTime   <- getCurrentTime
---   let timeDiff  =  diffUTCTime currentTime lastTime
---   let meanTime  =  timeDiff / (fromIntegral lastNumIter)
---   let newIter   =  round $ fromIntegral goalTime / meanTime
---   x1            <- x0
---   x2            <- fElse x1
---   x3            <- nestM f x2 newIter
---   switchEvery' (currentTime, goalTime, newIter) f fElse x3
 
 -- | This is a sketch of what a "log every so often, efficiently" function could look like.
+switchEvery'' :: (Integral t4, Integral t6) => (UTCTime, t6, t4, t7 -> IO t7, t5 -> IO t7, IO t5) -> IO (UTCTime, t6, Int, t7 -> IO t7, t5 -> IO t7, t7)
 switchEvery'' (lastTime, goalTime, lastNumIter, f, fElse, x0) = do
   currentTime <- getCurrentTime
   let timeDiff = diffUTCTime currentTime lastTime
@@ -162,7 +169,10 @@ switchEvery'' (lastTime, goalTime, lastNumIter, f, fElse, x0) = do
   x3 <- nestM f x2 newIter
   return (currentTime, goalTime, newIter, f, fElse, x3)
 
+switchEvery' :: (UTCTime, Integer, Int, IO t5 -> IO (IO t5), t5 -> IO (IO t5), IO t5) -> IO (UTCTime, Integer, Int, IO t5 -> IO (IO t5), t5 -> IO (IO t5), IO t5)
 switchEvery' = nestMForever switchEvery''
+
+
 
 --   foldM f a1 [x1, x2, ..., xm]
 -- ==
