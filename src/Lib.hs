@@ -72,14 +72,18 @@ streamTail ::          [ULL]
 streamTail = [1..]
 
 -- | one-liner to export gapless to mathematica:
+--
 -- @
 --  concatMap (\x->concat["{",show(head x),",",show(length x),"},"]).group . (\x->zipWith(-)(tail x)x) . onlyGapless $ [1..100]
 -- @
+--
+-- See only_gapless.md
 onlyGapless ::         [ULL] -> [ULL]
 onlyGapless = filter gapless
 
 differences :: Num a => [a] -> [a]
 differences = zipWith (-) =<< tail
+
 
 -- | Warning, this function is incomplete.
 getRuns  ::            [ULL] -> [ULL]
