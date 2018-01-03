@@ -1,3 +1,4 @@
+
 module Timers
     ( foldrOnce,
       foldlOnce,
@@ -51,8 +52,8 @@ nestMForever f x = foldM ((. const) . (.) $ f) x (repeat id)
 
 -- | `foldrOnce` applies a right fold, only once (for streams, primarily).
 foldrOnce :: (a -> b -> a) -> (a, [b]) -> (a, [b])
-foldrOnce _ (x, []    ) = (  x  , [])
-foldrOnce f (x, y : zs) = (f x y, zs)
+foldrOnce _  (x, []    ) = (  x  , [])
+foldrOnce f ~(x, y : zs) = (f x y, zs)
 
 -- | `foldrTimes` applies `foldrOnce` a given number of times.
 foldrTimes :: (a -> b -> a) -> (a, [b]) -> Int -> (a, [b])
@@ -171,22 +172,4 @@ switchEvery'' (lastTime, goalTime, lastNumIter, f, fElse, x0) = do
 
 switchEvery' :: (UTCTime, Integer, Int, IO t5 -> IO (IO t5), t5 -> IO (IO t5), IO t5) -> IO (UTCTime, Integer, Int, IO t5 -> IO (IO t5), t5 -> IO (IO t5), IO t5)
 switchEvery' = nestMForever switchEvery''
-
-
-
---   foldM f a1 [x1, x2, ..., xm]
--- ==
-
---       do
---         a2 <- f a1 x1
---         a3 <- f a2 x2
---         ...
---         f am xm
-
--- foldM
-
--- f :: a -> b -> c
--- f':: a -> _ -> c
-
--- \f x t -> foldM ((. const) . (.) $ f) x (replicate t id)
 

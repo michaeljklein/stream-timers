@@ -10,18 +10,24 @@ import Foreign.C.Types
 
 
 main :: IO ()
-main = defaultMain [
-        bgroup "getRuns" [
-          bench "getRuns  == getRunsA" $ nfIO (benchGetRuns getRuns  getRunsA),
-          bench "getRuns  == getRunsB" $ nfIO (benchGetRuns getRuns  getRunsB),
-          bench "getRunsA == getRunsB" $ nfIO (benchGetRuns getRunsA getRunsB)
-        ],
-        bgroup "getRuns'" [
-          bench "getRuns'  == getRuns'A" $ nfIO (benchGetRuns' getRuns'  getRuns'A),
-          bench "getRuns'  == getRuns'B" $ nfIO (benchGetRuns' getRuns'  getRuns'B),
-          bench "getRuns'A == getRuns'B" $ nfIO (benchGetRuns' getRuns'A getRuns'B)
-        ]
-       ]
+main = do
+  putStrLn "Test.Timers:"
+  timersSuccess <- testTimers
+  unless timersSuccess $ error "Test.Timers failed, aborting test"
+
+--   putStrLn "Benchmarking:"
+--   defaultMain [
+--     bgroup "getRuns" [
+--       bench "getRuns  == getRunsA" $ nfIO (benchGetRuns getRuns  getRunsA),
+--       bench "getRuns  == getRunsB" $ nfIO (benchGetRuns getRuns  getRunsB),
+--       bench "getRunsA == getRunsB" $ nfIO (benchGetRuns getRunsA getRunsB)
+--     ],
+--     bgroup "getRuns'" [
+--      bench "getRuns'  == getRuns'A" $ nfIO (benchGetRuns' getRuns'  getRuns'A),
+--      bench "getRuns'  == getRuns'B" $ nfIO (benchGetRuns' getRuns'  getRuns'B),
+--      bench "getRuns'A == getRuns'B" $ nfIO (benchGetRuns' getRuns'A getRuns'B)
+--     ]
+--     ]
 
 
 isSuccess :: Result -> Bool
