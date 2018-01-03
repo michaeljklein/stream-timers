@@ -42,9 +42,9 @@ nest f x n = foldr (f.) x (replicate n id)
 nestM :: Monad m => (b -> m b) -> b -> Int -> m b
 nestM f x n = foldM ((. const) . (.) $ f) x (replicate n id)
 
--- | `nestByM` generalizes `nestM` to numbers inside monads (for example, `io` could be (read.getLine)).
-nestByM :: (Monad m, Monad t, Foldable t) => (b -> m b) -> b -> t Int -> m b
-nestByM f x io = foldM ((. const) . (.) $ f) x (liftM (`replicate` id) io)
+-- | `nestByM` generalizes `nestM` to numbers inside monads (for example, @mn@ could be (read.getLine)).
+nestByM :: Monad m => (b -> m b) -> b -> m Int -> m b
+nestByM f x mn = foldM (\y z -> z f y) x =<< liftM (flip replicate ($)) mn
 
 -- | `nestMForever` is equivalent to `nestM f x Infinity`.
 nestMForever :: Monad m => (b -> m b) -> b -> m b
@@ -95,8 +95,9 @@ switchEveryN :: Monad m => (b -> b) -> (b -> m b) -> Int -> b -> m b
 switchEveryN f g n = nestMForever (g . flip (nest f) n)
 
 -- | `switchOnM` is to `switchEveryN` as `nestByM` is to `nestM`.
-switchOnM :: (Monad m, Monad m1, Monad t, Foldable t) => (b -> m1 b) -> (m1 b -> m b) -> t Int -> b -> m b
+switchOnM :: (Monad m, Monad m1) => (b -> m1 b) -> (m1 b -> m b) -> m1 Int -> b -> m b
 switchOnM f g m = nestMForever (g . flip (nestByM f) m)
+
 
 -- Next, need version of switchOnM that recurses for m.., i.e. [m x, m$m x, m$m$m x..]
 
