@@ -11,6 +11,7 @@ import Control.Monad
 import Test.QuickCheck
 import Data.Maybe
 
+
 prop_nestPlus :: Int -> Bool
 prop_nestPlus = liftM3 (\x y z -> (x == y) || (z < 0)) (nest (+1) 0) abs id
 

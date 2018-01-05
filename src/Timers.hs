@@ -1,15 +1,18 @@
 
 module Timers
     ( foldrOnce,
-      foldlOnce,
       foldrTimes,
+      foldlOnce,
       foldlTimes,
+      foldrOnceM,
       foldrTimesM,
+      foldlOnceM,
       foldlTimesM,
       nest,
       nestM,
       nestByM,
       nestMForever,
+      nestByOrd,
       switchByPred,
       switchOnM,
       switchEveryN,
@@ -21,18 +24,20 @@ module Timers
       switchEvery''
     ) where
 
-
 import Control.Monad (foldM, liftM, liftM2)
-import Data.Time.Clock (UTCTime, getCurrentTime, utctDayTime, diffUTCTime)
+import Data.Time.Clock (UTCTime, getCurrentTime, diffUTCTime)
 import Data.Void
 
 
 -- reallyNoWay                             :: Eq a => (a -> a) -> a -> a
 -- reallyNoWay = (\f x -> if f x == x then x else fix f)
-
+--
 -- reallyNoWay $ reallyNoWay               :: (Eq a, Eq (a -> a)) => (a -> a) -> a -> a
 -- reallyNoWay $ reallyNoWay $ reallyNoWay :: (Eq a, Eq (a -> a)) => (a -> a) -> a -> a
--- -- This is an ouroboros function: it's own, input and output types are all equal
+--
+-- This is (my attempt at) an ouroboros function: it's own, input and output types are all equal,
+-- assuming you can find a way to find equality between arbitrary functions of values with equality.
+
 
 -- | `nest` applies f to x, n times.
 nest :: (b -> b) -> b -> Int -> b
@@ -46,9 +51,155 @@ nestM f x n = foldM ((. const) . (.) $ f) x (replicate n id)
 nestByM :: Monad m => (b -> m b) -> b -> m Int -> m b
 nestByM f x mn = foldM (\y z -> z f y) x =<< liftM (flip replicate ($)) mn
 
+
 -- | `nestMForever` is equivalent to `nestM f x Infinity`.
+--
+-- @
+-- λ> nestMForever (\x -> print x >> return x) (return 10 :: Expire Int)
+-- Expire {getExpire = (1,Just 10)}
+-- Expire {getExpire = (1,Just 10)}
+-- Expire {getExpire = (1,Just 10)}
+-- Expire {getExpire = (1,Just 10)}
+-- Expire {getExpire = (1,Just 10)}
+-- Expire {getExpire = (1,Just 10)}
+-- Expire {getExpire = (1,Just 10)}
+-- Expire {getExpire = (1,Just 10)}
+-- Expire {getExpire = (1,Just 10)}
+-- Expire {ge^Cpire = (1,Just 10)}
+-- Expire {getExpire = (1,Just 10)}
+-- Expire {getExpireInterrupted.
+-- @
+--
+-- @
+-- λ> nestMForever (\x -> print x >> return x) (return 10 :: ExpireE Int)
+-- ExpireE {getExpireE = (1,10)}
+-- ExpireE {getExpireE = (1,10)}
+-- ExpireE {getExpireE = (1,10)}
+-- ExpireE {getExpireE = (1,10)}
+-- ExpireE {getExpireE = (1,10)}
+-- Ex^CE {getExpireE = (1,10)}
+-- ExpireE {getExpireE = (1,10)}
+-- ExpireE {getExpireE = (1,10)}Interrupted.
+-- @
+--
+-- @
+-- λ> dumpExpireIO =<< nestMForever (id $ \x -> (dumpExpireIO x >>= print) >> return x) (return 10 :: ExpireIO Int)
+-- J^Cust (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1Interrupted.
+-- @
+--
+-- @
+-- λ> dumpExpireIO =<< nestMForever (id $ \x -> (dumpExpireIO x >>= print >> killExpireIO x) >> return x) (return 10 :: ExpireIO Int)
+-- Just^Cust (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10Interrupted.
+-- @
+--
+-- @
+-- λ> dumpExpireIO =<< nestMForever (id $ \x -> (dumpExpireIO x >>= print) >> return x) (return 10 :: ExpireIO Int)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Just (1,10)
+-- Jus^Ct (1,10)
+-- JusInterrupted.
+--
+-- Real Mem: 157.4 MB
+--
+-- See `stable_infinite_ExpireIO_loop_sample.txt` for a sample
+-- @
+--
 nestMForever :: Monad m => (b -> m b) -> b -> m b
 nestMForever f x = foldM ((. const) . (.) $ f) x (repeat id)
+
+
+
+-- | This function assumes that applying `f` too many times is fine, it tries to apply `f` just enough times to hit EQ, then applies `g` and repeats forever
+nestByOrd :: (a -> Ordering) -> (a -> a) -> (a -> a) -> a -> a
+nestByOrd o f g x = nestByOrd' (or_,n0,n1) o f g x'
+  where
+    or_ = o x' :: Ordering
+    n0 = 0
+    n1 = 2
+    x' = nest f (g x) 2
+
+-- | Helper function to `nestByOrd`
+nestByOrd' :: (Ordering, Int, Int) -> (t -> Ordering) -> (t -> t) -> (t -> t) -> t -> t1
+nestByOrd' (or_,n0,n1) o f g x = nestByOrd' (or',n1,n2) o f g $ nest f (g x) n2
+  where
+    or'   = o x :: Ordering
+    delta = div (n0 + n1) 3 * (ordToInt or_ + ordToInt or')
+    n2    = max (n1 + delta) 1
+    ordToInt = fromEnum
+    -- 3 is a magic number, so delta is less than the mean but not by much (otherwise, would be more trouble to ensure convergence for 'nice' functions)
+
+
 
 
 -- | `foldrOnce` applies a right fold, only once (for streams, primarily).
@@ -104,7 +255,14 @@ switchOnM f g m = nestMForever (g . flip (nestByM f) m)
 
 
 
--- | `fixPt` gives the fixed point of f on x.
+-- | `fixPt` gives the fixed point of @f@ on @x@.
+-- Compare its type to that of `fix`:
+--
+-- @
+--  fix :: (a -> a) -> a
+-- @
+--
+-- This fixed-point stops at equality, e.g. @1, 2, 3, 3, a.. -> 1, 2, 3@.
 fixPt :: Eq a => (a -> a) -> a -> a
 fixPt = until =<< ((==) <*>)
 
@@ -112,38 +270,32 @@ fixPt = until =<< ((==) <*>)
 
 -- now we actually get to the printing...
 
+-- | Nest the function the given number of times, on the given value, printing every iteration
+--
+-- @
+--  \f n x -> (mapM_ print . take n . iterate f) x >> return (nest f n x)
+-- @
 printEveryN :: Show b => (b -> b) -> Int -> b -> IO b
-printEveryN = sideEffectEveryN print --switchEveryN f ((liftM2 (>>) print return) . f)
+printEveryN = sideEffectEveryN print
 
+
+-- | Nest the function the given number of times, on the given value, resulting in the given side-effect every iteration
+--
+-- @
+--  \s f n x -> (mapM_ s . take n . iterate f) x >> return (nest f n x)
+-- @
 sideEffectEveryN :: Monad m => (b -> m a) -> (b -> b) -> Int -> b -> m b
 sideEffectEveryN s f = switchEveryN f ((liftM2 (>>) s return) . f)
 
 
 
--- -- | This function assumes that applying `f` too many times is fine, it tries to apply `f` just enough times to hit EQ, then applies `g` and repeats forever
--- nestByOrd :: (a -> Ordering) -> (a -> a) -> (a -> a) -> a -> a
--- nestByOrd o f g x = nestByOrd' (or,n0,n1) o f g x'
---   where
---     or = o x'
---     n0 = 0
---     n1 = 2
---     x' = nest f (g x) 2
-
--- nestByOrd' (or,n0,n1) o f g x = nestByOrd' (or',n1,n2) o f g $ nest f (g x) n2
---   where
---     or'   = o x
---     delta = div (n0 + n1) 3 * (ordToInt or + ordToInt or')
---     n2    = max (n1 + delta) 1
--- -- 3 is a magic number, so delta is less than the mean but not by much (otherwise, would be more trouble to ensure convergence for 'nice' functions)
--- -- 1 is a magic number, so that the function
 
 
 
 
 
-
--- | seconds taken to be in [1..59]. This returns fElse of the input if the clock time's minutes == minutes, otherwise f x.
--- Note that this function results in an infinite loop
+-- | Seconds taken to be in @[1..59]@. This returns fElse of the input if the clock time's minutes == minutes, otherwise @f x@.
+-- Note that this function results in an infinite loop (which is why it has a return type of `Void`).
 switchEveryM  :: Int -> Int -> (a -> IO a) -> (a -> IO a) -> a -> IO Void
 switchEveryM goalTime iterations f fElse x = do
   currentTime <- getCurrentTime
@@ -172,6 +324,14 @@ switchEvery'' (lastTime, goalTime, lastNumIter, f, fElse, x0) = do
   x3 <- nestM f x2 newIter
   return (currentTime, goalTime, newIter, f, fElse, x3)
 
+
+-- | The next step, `switchEvery''` forever
+-- @
+--  `nestMForever` switchEvery''
+-- @
 switchEvery' :: (UTCTime, Integer, Int, IO t5 -> IO (IO t5), t5 -> IO (IO t5), IO t5) -> IO (UTCTime, Integer, Int, IO t5 -> IO (IO t5), t5 -> IO (IO t5), IO t5)
 switchEvery' = nestMForever switchEvery''
+
+
+
 

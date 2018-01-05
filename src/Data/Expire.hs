@@ -12,17 +12,18 @@ module Data.Expire
       ExpireE(..)
   ) where
 
-import Data.IORef
 import Control.Monad
+import Data.IORef
 import System.Mem.Weak
 import Unsafe.Coerce
-import Control.Applicative
+
 
 -- | `expireSteps` is a global number of steps taken for expiration.
 -- The idea is that the monad will throw some sort of exception, or result in `Nothing`,
 -- when more than this many `Functor`, `Applicative`, or `Monad` steps (actions) have been taken.
 expireSteps :: Int
 expireSteps = 1
+
 
 -- | Pure expiration, return `Nothing` to expire
 newtype Expire a = Expire { getExpire :: (Int, Maybe a) } deriving (Eq, Ord, Show, Functor)

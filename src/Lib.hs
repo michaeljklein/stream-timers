@@ -30,7 +30,7 @@ import Foreign.C.Types (CULLong)
 import qualified Data.Map.Strict as Map
 import Timers (foldlOnce, sideEffectEveryN, printEveryN) -- foldrTimes,
 import Control.Monad (liftM2)
-
+import Data.Map.Internal.Debug (showTreeWith)
 
 type ULL = CULLong
 type Map = Map.Map
@@ -160,7 +160,7 @@ posValInsert ((pos6,_,_,_,_),_) ((pos1,pos2,pos3,pos4,pos5), pastRuns) = if newR
 
 
 printMap :: forall a1 a. (a1, Map ULL (a, [(ULL, ULL, ULL, ULL, ULL)])) -> IO ()
-printMap = putStrLn . Map.showTreeWith (\k x -> show (k, snd x)) True False . snd
+printMap = putStrLn . showTreeWith (\k x -> show (k, snd x)) True False . snd
 
 ----- Ahhhhh need differences in positions of differences..
 

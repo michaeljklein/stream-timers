@@ -1,0 +1,577 @@
+Sampling process 70443 for 3 seconds with 1 millisecond of run time between samples
+Sampling completed, processing symbols...
+Analysis of sampling ghc (pid 70443) every 1 millisecond
+Process:         ghc [70443]
+Path:            /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/bin/ghc
+Load Address:    0x10c637000
+Identifier:      ghc
+Version:         ???
+Code Type:       X86-64
+Parent Process:  stack [70394]
+
+Date/Time:       2018-01-05 15:20:15.387 -0500
+Launch Time:     2018-01-05 13:57:06.928 -0500
+OS Version:      Mac OS X 10.11.6 (15G31)
+Report Version:  7
+Analysis Tool:   /usr/bin/sample
+----
+
+Call graph:
+    2695 Thread_1168746   DispatchQueue_1: com.apple.main-thread  (serial)
+    + 2695 hs_main  (in libHSrts_thr-ghc8.2.2.dylib) + 142  [0x1144fd04e]
+    +   2695 scheduleWaitThread  (in libHSrts_thr-ghc8.2.2.dylib) + 157  [0x11450273d]
+    +     2695 schedule  (in libHSrts_thr-ghc8.2.2.dylib) + 792  [0x114500d98]
+    +       2695 yieldCapability  (in libHSrts_thr-ghc8.2.2.dylib) + 395  [0x1144f158b]
+    +         2695 waitCondition  (in libHSrts_thr-ghc8.2.2.dylib) + 9  [0x11451b339]
+    +           2695 _pthread_cond_wait  (in libsystem_pthread.dylib) + 767  [0x7fff81345728]
+    +             2695 __psynch_cvwait  (in libsystem_kernel.dylib) + 10  [0x7fff903a1db6]
+    2695 Thread_1168747
+    + 2694 thread_start  (in libsystem_pthread.dylib) + 13  [0x7fff81342351]
+    + ! 2694 _pthread_start  (in libsystem_pthread.dylib) + 168  [0x7fff8134491a]
+    + !   2694 _pthread_body  (in libsystem_pthread.dylib) + 131  [0x7fff8134499d]
+    + !     2694 itimer_thread_func  (in libHSrts_thr-ghc8.2.2.dylib) + 96  [0x11451a910]
+    + !       2694 usleep  (in libsystem_c.dylib) + 54  [0x7fff9658fc02]
+    + !         2680 nanosleep  (in libsystem_c.dylib) + 199  [0x7fff9658fd0f]
+    + !         : 2675 __semwait_signal  (in libsystem_kernel.dylib) + 10  [0x7fff903a210a]
+    + !         : 3 cerror  (in libsystem_kernel.dylib) + 0  [0x7fff9039c7f2]
+    + !         : 2 cerror_nocancel  (in libsystem_kernel.dylib) + 20  [0x7fff9039c7e1]
+    + !         11 nanosleep  (in libsystem_c.dylib) + 180,29  [0x7fff9658fcfc,0x7fff9658fc65]
+    + !         3 nanosleep  (in libsystem_c.dylib) + 208  [0x7fff9658fd18]
+    + !           3 __error  (in libsystem_kernel.dylib) + 0  [0x7fff9039c7b5]
+    + 1 contextSwitchAllCapabilities  (in libHSrts_thr-ghc8.2.2.dylib) + 6  [0x1144f0f66]
+    2695 Thread_1168748
+    + 1325 cb5Z_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 244  [0x1138fb804]
+    + ! 1325 kevent  (in libsystem_kernel.dylib) + 10  [0x7fff903a2eca]
+    + 611 base_GHCziIOziFD_zdwwriteRawBufferPtr_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 87  [0x11370afc7]
+    + ! 597 fdReady  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 97  [0x113952e01]
+    + ! : 597 poll  (in libsystem_kernel.dylib) + 10  [0x7fff903a32a2]
+    + ! 14 fdReady  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 97,2,...  [0x113952e01,0x113952da2,...]
+    + 248 thread_start  (in libsystem_pthread.dylib) + 13  [0x7fff81342351]
+    + ! 248 _pthread_start  (in libsystem_pthread.dylib) + 168  [0x7fff8134491a]
+    + !   248 _pthread_body  (in libsystem_pthread.dylib) + 131  [0x7fff8134499d]
+    + !     248 scheduleWorker  (in libHSrts_thr-ghc8.2.2.dylib) + 12  [0x11450276c]
+    + !       192 schedule  (in libHSrts_thr-ghc8.2.2.dylib) + 792  [0x114500d98]
+    + !       : 192 yieldCapability  (in libHSrts_thr-ghc8.2.2.dylib) + 395  [0x1144f158b]
+    + !       :   192 waitCondition  (in libHSrts_thr-ghc8.2.2.dylib) + 9  [0x11451b339]
+    + !       :     192 _pthread_cond_wait  (in libsystem_pthread.dylib) + 767  [0x7fff81345728]
+    + !       :       192 __psynch_cvwait  (in libsystem_kernel.dylib) + 10  [0x7fff903a1db6]
+    + !       44 schedule  (in libHSrts_thr-ghc8.2.2.dylib) + 3473  [0x114501811]
+    + !       : 43 interpretBCO  (in libHSrts_thr-ghc8.2.2.dylib) + 4685,4694,...  [0x1144f5f4d,0x1144f5f56,...]
+    + !       : 1 interpretBCO  (in libHSrts_thr-ghc8.2.2.dylib) + 5403  [0x1144f621b]
+    + !       :   1 updateThunk  (in libHSrts_thr-ghc8.2.2.dylib) + 0  [0x114506ee0]
+    + !       7 schedule  (in libHSrts_thr-ghc8.2.2.dylib) + 1121,1226,...  [0x114500ee1,0x114500f4a,...]
+    + !       2 __error  (in libsystem_kernel.dylib) + 9,12  [0x7fff9039c7be,0x7fff9039c7c1]
+    + !       1 StgReturn  (in libHSrts_thr-ghc8.2.2.dylib) + 39  [0x114505584]
+    + !       1 StgRunIsImplementedInAssembler  (in libHSrts_thr-ghc8.2.2.dylib) + 17  [0x114505541]
+    + !       1 schedule  (in libHSrts_thr-ghc8.2.2.dylib) + 1116  [0x114500edc]
+    + !         1 __error  (in libsystem_kernel.dylib) + 23  [0x7fff9039c7cc]
+    + 212 saHF_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 156  [0x11370adf4]
+    + ! 212 write  (in libsystem_kernel.dylib) + 10  [0x7fff903a391a]
+    + 35 saHF_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 124  [0x11370add4]
+    + ! 30 suspendThread  (in libHSrts_thr-ghc8.2.2.dylib) + 88  [0x114502358]
+    + ! : 26 threadPaused  (in libHSrts_thr-ghc8.2.2.dylib) + 78,75,...  [0x11450642e,0x11450642b,...]
+    + ! : 4 threadPaused  (in libHSrts_thr-ghc8.2.2.dylib) + 25  [0x1145063f9]
+    + ! :   4 maybePerformBlockedException  (in libHSrts_thr-ghc8.2.2.dylib) + 2,193  [0x1144fa4e2,0x1144fa5a1]
+    + ! 3 suspendThread  (in libHSrts_thr-ghc8.2.2.dylib) + 111,165,...  [0x11450236f,0x1145023a5,...]
+    + ! 1 suspendThread  (in libHSrts_thr-ghc8.2.2.dylib) + 29  [0x11450231d]
+    + ! : 1 __error  (in libsystem_kernel.dylib) + 0  [0x7fff9039c7b5]
+    + ! 1 suspendThread  (in libHSrts_thr-ghc8.2.2.dylib) + 232  [0x1145023e8]
+    + !   1 giveCapabilityToTask.isra.11  (in libHSrts_thr-ghc8.2.2.dylib) + 21  [0x1144f0555]
+    + !     1 _pthread_mutex_lock_wait  (in libsystem_pthread.dylib) + 89  [0x7fff81344e4a]
+    + !       1 __psynch_mutexwait  (in libsystem_kernel.dylib) + 10  [0x7fff903a1de6]
+    + 12 saHF_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 177  [0x11370ae09]
+    + ! 6 resumeThread  (in libHSrts_thr-ghc8.2.2.dylib) + 0,121  [0x114502450,0x1145024c9]
+    + ! 5 resumeThread  (in libHSrts_thr-ghc8.2.2.dylib) + 55  [0x114502487]
+    + ! : 3 waitForCapability  (in libHSrts_thr-ghc8.2.2.dylib) + 132  [0x1144f12d4]
+    + ! : | 3 waitForReturnCapability  (in libHSrts_thr-ghc8.2.2.dylib) + 251  [0x1144f06cb]
+    + ! : |   3 waitCondition  (in libHSrts_thr-ghc8.2.2.dylib) + 9  [0x11451b339]
+    + ! : |     3 _pthread_cond_wait  (in libsystem_pthread.dylib) + 767  [0x7fff81345728]
+    + ! : |       3 __psynch_cvwait  (in libsystem_kernel.dylib) + 10  [0x7fff903a1db6]
+    + ! : 1 waitForCapability  (in libHSrts_thr-ghc8.2.2.dylib) + 43  [0x1144f127b]
+    + ! : | 1 pthread_mutex_lock  (in libsystem_pthread.dylib) + 0  [0x7fff8134245c]
+    + ! : 1 waitForCapability  (in libHSrts_thr-ghc8.2.2.dylib) + 2  [0x1144f1252]
+    + ! 1 resumeThread  (in libHSrts_thr-ghc8.2.2.dylib) + 245  [0x114502545]
+    + !   1 dirty_TSO  (in libHSrts_thr-ghc8.2.2.dylib) + 3  [0x114517913]
+    + 11 ???  (in <unknown binary>)  [0x7fc4bac04800]
+    + ! 11 threadPaused  (in libHSrts_thr-ghc8.2.2.dylib) + 320,329,...  [0x114506520,0x114506529,...]
+    + 10 stg_upd_frame_info  (in libHSrts_thr-ghc8.2.2.dylib) + 8,49,...  [0x114524410,0x114524439,...]
+    + 8 stg_PAP_apply  (in libHSrts_thr-ghc8.2.2.dylib) + 79,0,...  [0x11451c1af,0x11451c160,...]
+    + 7 base_GHCziIOziEncodingziUTF8_mkUTF1_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4,0,...  [0x1136f8774,0x1136f8770,...]
+    + 6 base_GHCziIOziFD_zdfBufferedIOFD16_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0,20,...  [0x11370aa98,0x11370aaac,...]
+    + 6 stg_ap_v_info  (in libHSrts_thr-ghc8.2.2.dylib) + 525,59,...  [0x11452482d,0x11452465b,...]
+    + 5 c7p8_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 50,46,...  [0x1136f9262,0x1136f925e,...]
+    + 5 chR0_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 36,24  [0x113731f0c,0x113731f00]
+    + 5 pthread_mutex_unlock  (in libsystem_pthread.dylib) + 108,38,...  [0x7fff8134284d,0x7fff81342807,...]
+    + 5 saHF_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 156,62,...  [0x11370adf4,0x11370ad96,...]
+    + 4 base_GHCziIOziBufferedIO_CZCBufferedIO_con_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x1136de328]
+    + 4 base_GHCziIOziFD_zdwwriteRawBufferPtr_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 87,82,...  [0x11370afc7,0x11370afc2,...]
+    + 4 base_GHCziIOziHandleziInternals_zdwdozuoperation_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 24,13,...  [0x11372c810,0x11372c805,...]
+    + 4 base_GHCziIOziHandleziTypes_FileHandle_con_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0,3  [0x11374ccb8,0x11374ccbb]
+    + 4 cbaH_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 34,52,...  [0x11370b312,0x11370b324,...]
+    + 4 cdSM_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 12,25,...  [0x1137282c4,0x1137282d1,...]
+    + 4 cdT8_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 88,70,...  [0x113728130,0x11372811e,...]
+    + 4 cdVt_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 85,36,...  [0x1137281b5,0x113728184,...]
+    + 4 chTY_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 16,0,...  [0x1137321a8,0x113732198,...]
+    + 4 pthread_mutex_lock  (in libsystem_pthread.dylib) + 84,7,...  [0x7fff813424b0,0x7fff81342463,...]
+    + 4 stg_BLACKHOLE_info  (in libHSrts_thr-ghc8.2.2.dylib) + 267,264,...  [0x114522683,0x114522680,...]
+    + 4 stg_ap_p_fast  (in libHSrts_thr-ghc8.2.2.dylib) + 3,44,...  [0x11452964b,0x114529674,...]
+    + 3 MainCapability  (in libHSrts_thr-ghc8.2.2.dylib) + 24  [0x1145501d8]
+    + ! 3 poll  (in libsystem_kernel.dylib) + 0  [0x7fff903a3298]
+    + 3 cdSl_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 77,7,...  [0x113728055,0x11372800f,...]
+    + 3 cdU9_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 187,198,...  [0x113728403,0x11372840e,...]
+    + 3 cdVm_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 29,37,...  [0x113727ee5,0x113727eed,...]
+    + 3 cdrs_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 80,84  [0x113724be8,0x113724bec]
+    + 3 ceOH_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 61,4  [0x11372f005,0x11372efcc]
+    + 3 stg_ap_pp_info  (in libHSrts_thr-ghc8.2.2.dylib) + 666,23,...  [0x1145266b2,0x11452642f,...]
+    + 3 stg_mkWeakzh  (in libHSrts_thr-ghc8.2.2.dylib) + 4,0,...  [0x11451ff3c,0x11451ff38,...]
+    + 3 stg_takeMVarzh  (in libHSrts_thr-ghc8.2.2.dylib) + 10,79,...  [0x114521142,0x114521187,...]
+    + 3 stg_unmaskAsyncExceptionszh_ret_info  (in libHSrts_thr-ghc8.2.2.dylib) + 170,177  [0x11451d57a,0x11451d581]
+    + 2 ???  (in <unknown binary>)  [0x200000000]
+    + ! 2 scheduleDoGC  (in libHSrts_thr-ghc8.2.2.dylib) + 1496  [0x114500628]
+    + !   1 GarbageCollect  (in libHSrts_thr-ghc8.2.2.dylib) + 1931  [0x11450f2eb]
+    + !   : 1 markWeakPtrList  (in libHSrts_thr-ghc8.2.2.dylib) + 56  [0x114511848]
+    + !   :   1 evacuate  (in libHSrts_thr-ghc8.2.2.dylib) + 106  [0x11452ca0a]
+    + !   1 GarbageCollect  (in libHSrts_thr-ghc8.2.2.dylib) + 1956  [0x11450f304]
+    + !     1 scavenge_until_all_done  (in libHSrts_thr-ghc8.2.2.dylib) + 474  [0x11450e9ba]
+    + !       1 scavenge_loop1  (in libHSrts_thr-ghc8.2.2.dylib) + 3023  [0x1145139ff]
+    + !         1 scavenge_block1  (in libHSrts_thr-ghc8.2.2.dylib) + 3265  [0x11452fa31]
+    + 2 ???  (in <unknown binary>)  [0x42050faeb0]
+    + ! 2 evacuate1  (in libHSrts_thr-ghc8.2.2.dylib) + 1436  [0x11452ad2c]
+    + 2 ???  (in <unknown binary>)  [0x7fc4bac04830]
+    + ! 2 allocate  (in libHSrts_thr-ghc8.2.2.dylib) + 463  [0x114516faf]
+    + 2 StgReturn  (in libHSrts_thr-ghc8.2.2.dylib) + 0  [0x11450555d]
+    + 2 base_GHCziIOziHandleziInternals_zdwwantWritableHandlezq_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4,29  [0x11372f314,0x11372f32d]
+    + 2 base_GHCziIOziHandleziText_zdwhPutChar_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 9,34  [0x113731f71,0x113731f8a]
+    + 2 base_GHCziShow_zdfShowZLz2cUZRzuzdsgo1_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4,31  [0x113803ff4,0x11380400f]
+    + 2 c9gL_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x11361c650]
+    + 2 cb8o_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4,17  [0x11370ac8c,0x11370ac99]
+    + 2 cbaQ_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 73  [0x11370b289]
+    + ! 2 rtsSupportsBoundThreads  (in libHSrts_thr-ghc8.2.2.dylib) + 0  [0x1145070d0]
+    + 2 cbaQ_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 28,24  [0x11370b25c,0x11370b258]
+    + 2 cc4W_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 37,11  [0x113710fd5,0x113710fbb]
+    + 2 ceBC_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0,29  [0x11372d408,0x11372d425]
+    + 2 ceMJ_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0,22  [0x11372f290,0x11372f2a6]
+    + 2 chRo_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 3,0  [0x113731e2b,0x113731e28]
+    + 2 chUj_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x1137321dc]
+    + 2 ckf8_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 7  [0x113743877]
+    + 2 resumeThread  (in libHSrts_thr-ghc8.2.2.dylib) + 292  [0x114502574]
+    + 2 stg_ap_p_info  (in libHSrts_thr-ghc8.2.2.dylib) + 540,92  [0x114525fcc,0x114525e0c]
+    + 2 stg_ap_v_fast  (in libHSrts_thr-ghc8.2.2.dylib) + 44  [0x114528c34]
+    + 2 stg_catchzh  (in libHSrts_thr-ghc8.2.2.dylib) + 20,35  [0x11451db24,0x11451db33]
+    + 2 write  (in libsystem_kernel.dylib) + 0  [0x7fff903a3910]
+    + 1 ???  (in <unknown binary>)  [0x2bac04840]
+    + ! 1 scheduleDoGC  (in libHSrts_thr-ghc8.2.2.dylib) + 1496  [0x114500628]
+    + !   1 GarbageCollect  (in libHSrts_thr-ghc8.2.2.dylib) + 1931  [0x11450f2eb]
+    + !     1 markWeakPtrList  (in libHSrts_thr-ghc8.2.2.dylib) + 56  [0x114511848]
+    + !       1 evacuate  (in libHSrts_thr-ghc8.2.2.dylib) + 123  [0x11452ca1b]
+    + 1 ???  (in <unknown binary>)  [0x42050fae48]
+    + ! 1 evacuate1  (in libHSrts_thr-ghc8.2.2.dylib) + 1436  [0x11452ad2c]
+    + 1 DYLD-STUB$$resumeThread  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x113953f5e]
+    + 1 DYLD-STUB$$write  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x113954264]
+    + 1 __error  (in libsystem_kernel.dylib) + 9  [0x7fff9039c7be]
+    + 1 base_DataziMaybe_maybe_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 9  [0x11357a351]
+    + 1 base_ForeignziCziError_throwErrnoIfMinus1RetryMayBlock2_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x1135e1b60]
+    + 1 base_GHCziBase_CZCMonad_con_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 3  [0x113624613]
+    + 1 base_GHCziBase_zdfApplicativeIO2_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x113619488]
+    + 1 base_GHCziBase_zdfApplicativeMaybezuzdcfmap_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x113620564]
+    + 1 base_GHCziBase_zdfMonadIO1_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x1136193f4]
+    + 1 base_GHCziBase_zpzp_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x11361c5a4]
+    + 1 base_GHCziEventziManager_loop5_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 31  [0x113902df7]
+    + 1 base_GHCziIOziFD_zdfBufferedIOFD6_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 13  [0x113710e75]
+    + 1 base_GHCziIOziHandleziInternals_zdwstreamEncode_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x113724a5c]
+    + 1 base_GHCziIOziHandleziInternals_zdwwithHandlezq_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 9  [0x11372d3a9]
+    + 1 base_GHCziIOziHandleziTypes_NoBuffering_con_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x11374cad8]
+    + 1 base_GHCziShow_showSignedInt_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 24  [0x1137f2e50]
+    + 1 base_GHCziShow_zdfShowZLz2cUZRzuzdcshowsPrec_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x1138042b8]
+    + 1 base_GHCziShow_zdwitoszq_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 42  [0x1137f2942]
+    + 1 c1yk_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x11356791c]
+    + 1 c2pw_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x1136dd29c]
+    + 1 c6Cg_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x1135e1c30]
+    + 1 c7pd_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 115  [0x1136f917b]
+    + 1 c7yD_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 27  [0x1138f14e3]
+    + ! 1 read  (in libsystem_kernel.dylib) + 10  [0x7fff903a3362]
+    + 1 c8Lj_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 11  [0x11361943b]
+    + 1 cb0k_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 84  [0x1138fb454]
+    + ! 1 kevent  (in libsystem_kernel.dylib) + 10  [0x7fff903a2eca]
+    + 1 cb8i_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x11370b16c]
+    + 1 cb9o_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 17  [0x11370aea1]
+    + 1 cbZZ_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x113808b10]
+    + 1 cbat_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 211  [0x11370b12b]
+    + 1 cbcY_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 11  [0x11370b62b]
+    + 1 cc4Q_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 7  [0x113710f47]
+    + 1 cc57_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 45  [0x113710ee5]
+    + 1 cdTN_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 145  [0x1137284d1]
+    + 1 cdTo_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 3  [0x11372809b]
+    + 1 cdVo_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 11  [0x113727dfb]
+    + 1 cdrl_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 7  [0x113724c1f]
+    + 1 chQP_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x113731d0c]
+    + 1 chRY_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x113731c04]
+    + 1 ckc4_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 33  [0x113743209]
+    + 1 ghczmprim_GHCziTypes_ZC_con_info  (in libHSghc-prim-0.5.1.1-ghc8.2.2.dylib) + 0  [0x114122a48]
+    + 1 isAlive  (in libHSrts_thr-ghc8.2.2.dylib) + 120  [0x114510ae8]
+    + 1 releaseCapability_  (in libHSrts_thr-ghc8.2.2.dylib) + 257  [0x1144f1101]
+    + 1 s8ax_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x11361c550]
+    + 1 s9bn_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x113808a04]
+    + 1 scSo_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x1139037d8]
+    + 1 sdfB_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 28  [0x11372eac4]
+    + 1 sig_mutex  (in libHSrts_thr-ghc8.2.2.dylib) + 64  [0x1145501c0]
+    + ! 1 allocate  (in libHSrts_thr-ghc8.2.2.dylib) + 372  [0x114516f54]
+    + 1 stg_AP_info  (in libHSrts_thr-ghc8.2.2.dylib) + 87  [0x11451c27f]
+    + 1 stg_IND_STATIC_info  (in libHSrts_thr-ghc8.2.2.dylib) + 0  [0x114522558]
+    + 1 stg_ap_0_fast  (in libHSrts_thr-ghc8.2.2.dylib) + 0  [0x11451c098]
+    + 1 stg_ap_pp_fast  (in libHSrts_thr-ghc8.2.2.dylib) + 36  [0x114529934]
+    + 1 stg_ap_stk_p  (in libHSrts_thr-ghc8.2.2.dylib) + 0  [0x1145284f0]
+    + 1 stg_ap_stk_pp  (in libHSrts_thr-ghc8.2.2.dylib) + 4  [0x11452876c]
+    + 1 stg_enter_info  (in libHSrts_thr-ghc8.2.2.dylib) + 89  [0x11451e1c9]
+    + 1 stg_gc_noregs  (in libHSrts_thr-ghc8.2.2.dylib) + 264  [0x11451e0d0]
+    + 1 stg_getMaskingStatezh  (in libHSrts_thr-ghc8.2.2.dylib) + 0  [0x11451d920]
+    + 1 stg_maskAsyncExceptionszh  (in libHSrts_thr-ghc8.2.2.dylib) + 79  [0x11451d6c7]
+    + 1 stg_putMVarzh  (in libHSrts_thr-ghc8.2.2.dylib) + 10  [0x1145214e2]
+    + 1 stg_returnToSchedNotPaused  (in libHSrts_thr-ghc8.2.2.dylib) + 36  [0x11452316c]
+    + 1 stg_returnToStackTop  (in libHSrts_thr-ghc8.2.2.dylib) + 15  [0x11452309f]
+    2695 Thread_1168749
+    + 1349 cb5Z_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 244  [0x1138fb804]
+    + ! 1349 kevent  (in libsystem_kernel.dylib) + 10  [0x7fff903a2eca]
+    + 514 base_GHCziIOziFD_zdwwriteRawBufferPtr_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 87  [0x11370afc7]
+    + ! 507 fdReady  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 97  [0x113952e01]
+    + ! : 507 poll  (in libsystem_kernel.dylib) + 10  [0x7fff903a32a2]
+    + ! 7 fdReady  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 97,2,...  [0x113952e01,0x113952da2,...]
+    + 263 thread_start  (in libsystem_pthread.dylib) + 13  [0x7fff81342351]
+    + ! 263 _pthread_start  (in libsystem_pthread.dylib) + 168  [0x7fff8134491a]
+    + !   263 _pthread_body  (in libsystem_pthread.dylib) + 131  [0x7fff8134499d]
+    + !     263 scheduleWorker  (in libHSrts_thr-ghc8.2.2.dylib) + 12  [0x11450276c]
+    + !       201 schedule  (in libHSrts_thr-ghc8.2.2.dylib) + 792  [0x114500d98]
+    + !       : 201 yieldCapability  (in libHSrts_thr-ghc8.2.2.dylib) + 395  [0x1144f158b]
+    + !       :   201 waitCondition  (in libHSrts_thr-ghc8.2.2.dylib) + 9  [0x11451b339]
+    + !       :     190 _pthread_cond_wait  (in libsystem_pthread.dylib) + 767  [0x7fff81345728]
+    + !       :     | 190 __psynch_cvwait  (in libsystem_kernel.dylib) + 10  [0x7fff903a1db6]
+    + !       :     11 __psynch_cvwait  (in libsystem_kernel.dylib) + 5  [0x7fff903a1db1]
+    + !       51 schedule  (in libHSrts_thr-ghc8.2.2.dylib) + 3473  [0x114501811]
+    + !       : 51 interpretBCO  (in libHSrts_thr-ghc8.2.2.dylib) + 4694,1068,...  [0x1144f5f56,0x1144f512c,...]
+    + !       7 schedule  (in libHSrts_thr-ghc8.2.2.dylib) + 1121,1279,...  [0x114500ee1,0x114500f7f,...]
+    + !       2 schedule  (in libHSrts_thr-ghc8.2.2.dylib) + 1386  [0x114500fea]
+    + !       : 2 stopHeapProfTimer  (in libHSrts_thr-ghc8.2.2.dylib) + 0,7  [0x1144f9680,0x1144f9687]
+    + !       1 StgRunIsImplementedInAssembler  (in libHSrts_thr-ghc8.2.2.dylib) + 7  [0x114505537]
+    + !       1 schedule  (in libHSrts_thr-ghc8.2.2.dylib) + 1102  [0x114500ece]
+    + !         1 startHeapProfTimer  (in libHSrts_thr-ghc8.2.2.dylib) + 34  [0x1144f96b2]
+    + 233 saHF_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 156  [0x11370adf4]
+    + ! 233 write  (in libsystem_kernel.dylib) + 10,20  [0x7fff903a391a,0x7fff903a3924]
+    + 47 saHF_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 124  [0x11370add4]
+    + ! 41 suspendThread  (in libHSrts_thr-ghc8.2.2.dylib) + 88  [0x114502358]
+    + ! : 38 threadPaused  (in libHSrts_thr-ghc8.2.2.dylib) + 78,87,...  [0x11450642e,0x114506437,...]
+    + ! : 3 threadPaused  (in libHSrts_thr-ghc8.2.2.dylib) + 25  [0x1145063f9]
+    + ! :   3 maybePerformBlockedException  (in libHSrts_thr-ghc8.2.2.dylib) + 2,4  [0x1144fa4e2,0x1144fa4e4]
+    + ! 4 suspendThread  (in libHSrts_thr-ghc8.2.2.dylib) + 39,0,...  [0x114502327,0x114502300,...]
+    + ! 1 suspendThread  (in libHSrts_thr-ghc8.2.2.dylib) + 29  [0x11450231d]
+    + ! : 1 __error  (in libsystem_kernel.dylib) + 0  [0x7fff9039c7b5]
+    + ! 1 suspendThread  (in libHSrts_thr-ghc8.2.2.dylib) + 240  [0x1145023f0]
+    + !   1 pthread_mutex_unlock  (in libsystem_pthread.dylib) + 0  [0x7fff813427e1]
+    + 15 ???  (in <unknown binary>)  [0x7fc4bad00050]
+    + ! 15 threadPaused  (in libHSrts_thr-ghc8.2.2.dylib) + 351,347,...  [0x11450653f,0x11450653b,...]
+    + 10 saHF_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 177  [0x11370ae09]
+    + ! 6 resumeThread  (in libHSrts_thr-ghc8.2.2.dylib) + 23,235,...  [0x114502467,0x11450253b,...]
+    + ! 3 resumeThread  (in libHSrts_thr-ghc8.2.2.dylib) + 55  [0x114502487]
+    + ! : 2 waitForCapability  (in libHSrts_thr-ghc8.2.2.dylib) + 132  [0x1144f12d4]
+    + ! : | 2 waitForReturnCapability  (in libHSrts_thr-ghc8.2.2.dylib) + 251  [0x1144f06cb]
+    + ! : |   2 waitCondition  (in libHSrts_thr-ghc8.2.2.dylib) + 9  [0x11451b339]
+    + ! : |     2 _pthread_cond_wait  (in libsystem_pthread.dylib) + 767  [0x7fff81345728]
+    + ! : |       2 __psynch_cvwait  (in libsystem_kernel.dylib) + 10  [0x7fff903a1db6]
+    + ! : 1 waitForCapability  (in libHSrts_thr-ghc8.2.2.dylib) + 60  [0x1144f128c]
+    + ! 1 resumeThread  (in libHSrts_thr-ghc8.2.2.dylib) + 245  [0x114502545]
+    + !   1 dirty_TSO  (in libHSrts_thr-ghc8.2.2.dylib) + 3  [0x114517913]
+    + 10 stg_PAP_apply  (in libHSrts_thr-ghc8.2.2.dylib) + 43,117,...  [0x11451c18b,0x11451c1d5,...]
+    + 9 stg_ap_v_info  (in libHSrts_thr-ghc8.2.2.dylib) + 0,521,...  [0x114524620,0x114524829,...]
+    + 7 stg_ap_p_fast  (in libHSrts_thr-ghc8.2.2.dylib) + 0,79,...  [0x114529648,0x114529697,...]
+    + 6 base_GHCziIOziEncodingziUTF8_mkUTF1_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 246,254,...  [0x1136f8866,0x1136f886e,...]
+    + 6 stg_ap_pp_info  (in libHSrts_thr-ghc8.2.2.dylib) + 16,691,...  [0x114526428,0x1145266cb,...]
+    + 6 stg_putMVarzh  (in libHSrts_thr-ghc8.2.2.dylib) + 338,10,...  [0x11452162a,0x1145214e2,...]
+    + 6 stg_upd_frame_info  (in libHSrts_thr-ghc8.2.2.dylib) + 51,8,...  [0x11452443b,0x114524410,...]
+    + 5 ???  (in <unknown binary>)  [0x200000000]
+    + ! 5 scheduleDoGC  (in libHSrts_thr-ghc8.2.2.dylib) + 1496  [0x114500628]
+    + !   2 GarbageCollect  (in libHSrts_thr-ghc8.2.2.dylib) + 1931  [0x11450f2eb]
+    + !   : 2 markWeakPtrList  (in libHSrts_thr-ghc8.2.2.dylib) + 56  [0x114511848]
+    + !   :   2 evacuate  (in libHSrts_thr-ghc8.2.2.dylib) + 106  [0x11452ca0a]
+    + !   2 GarbageCollect  (in libHSrts_thr-ghc8.2.2.dylib) + 1956  [0x11450f304]
+    + !   : 2 scavenge_until_all_done  (in libHSrts_thr-ghc8.2.2.dylib) + 474  [0x11450e9ba]
+    + !   :   2 scavenge_loop1  (in libHSrts_thr-ghc8.2.2.dylib) + 3023  [0x1145139ff]
+    + !   :     2 scavenge_block1  (in libHSrts_thr-ghc8.2.2.dylib) + 2909  [0x11452f8cd]
+    + !   :       2 evacuate1  (in libHSrts_thr-ghc8.2.2.dylib) + 123  [0x11452a80b]
+    + !   1 GarbageCollect  (in libHSrts_thr-ghc8.2.2.dylib) + 1809  [0x11450f271]
+    + !     1 markCAFs  (in libHSrts_thr-ghc8.2.2.dylib) + 48  [0x114510bb0]
+    + !       1 mark_root  (in libHSrts_thr-ghc8.2.2.dylib) + 15  [0x11450e7cf]
+    + !         1 evacuate  (in libHSrts_thr-ghc8.2.2.dylib) + 32  [0x11452c9c0]
+    + 5 __error  (in libsystem_kernel.dylib) + 9  [0x7fff9039c7be]
+    + 5 base_GHCziIOziFD_zdwwriteRawBufferPtr_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 30,77,...  [0x11370af8e,0x11370afbd,...]
+    + 5 cbaH_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 34,89,...  [0x11370b312,0x11370b349,...]
+    + 5 ceBC_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0,4,...  [0x11372d408,0x11372d40c,...]
+    + 5 ceMJ_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 22,26,...  [0x11372f2a6,0x11372f2aa,...]
+    + 4 MainCapability  (in libHSrts_thr-ghc8.2.2.dylib) + 24  [0x1145501d8]
+    + ! 3 poll  (in libsystem_kernel.dylib) + 5,0  [0x7fff903a329d,0x7fff903a3298]
+    + ! 1 DYLD-STUB$$poll  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x1139541b6]
+    + 4 cbaQ_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 41,24  [0x11370b269,0x11370b258]
+    + 4 cbcY_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 106,102,...  [0x11370b68a,0x11370b686,...]
+    + 4 cdVt_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 65,28,...  [0x1137281a1,0x11372817c,...]
+    + 4 chUj_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4,18,...  [0x1137321dc,0x1137321ea,...]
+    + 4 pthread_mutex_lock  (in libsystem_pthread.dylib) + 84,30,...  [0x7fff813424b0,0x7fff8134247a,...]
+    + 4 saHF_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 58,137,...  [0x11370ad92,0x11370ade1,...]
+    + 4 sig_mutex  (in libHSrts_thr-ghc8.2.2.dylib) + 64  [0x1145501c0]
+    + ! 3 threadPaused  (in libHSrts_thr-ghc8.2.2.dylib) + 320,354,...  [0x114506520,0x114506542,...]
+    + ! 1 allocate  (in libHSrts_thr-ghc8.2.2.dylib) + 339  [0x114516f33]
+    + 4 stg_ap_v_fast  (in libHSrts_thr-ghc8.2.2.dylib) + 0,6,...  [0x114528c08,0x114528c0e,...]
+    + 3 base_GHCziIOziHandleziInternals_zdwdozuoperation_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 31,4,...  [0x11372c817,0x11372c7fc,...]
+    + 3 c7pd_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 115,17,...  [0x1136f917b,0x1136f9119,...]
+    + 3 cb7O_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 41,74,...  [0x11370b201,0x11370b222,...]
+    + 3 cc4Q_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 7,50,...  [0x113710f47,0x113710f72,...]
+    + 3 cdT8_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 92,96,...  [0x113728134,0x113728138,...]
+    + 3 cdVg_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 73,0  [0x113727e81,0x113727e38]
+    + 3 chR0_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 65,12  [0x113731f29,0x113731ef4]
+    + 3 pthread_mutex_unlock  (in libsystem_pthread.dylib) + 108,7  [0x7fff8134284d,0x7fff813427e8]
+    + 3 stg_AP_info  (in libHSrts_thr-ghc8.2.2.dylib) + 68,100,...  [0x11451c26c,0x11451c28c,...]
+    + 3 stg_ap_ppv_info  (in libHSrts_thr-ghc8.2.2.dylib) + 773,3  [0x114526a95,0x114526793]
+    + 3 stg_ap_pv_fast  (in libHSrts_thr-ghc8.2.2.dylib) + 44,0,...  [0x1145297c4,0x114529798,...]
+    + 3 stg_getMaskingStatezh  (in libHSrts_thr-ghc8.2.2.dylib) + 16,7,...  [0x11451d930,0x11451d927,...]
+    + 3 stg_maskAsyncExceptionszh  (in libHSrts_thr-ghc8.2.2.dylib) + 7,69,...  [0x11451d67f,0x11451d6bd,...]
+    + 3 stg_takeMVarzh  (in libHSrts_thr-ghc8.2.2.dylib) + 79,72  [0x114521187,0x114521180]
+    + 3 stg_unmaskAsyncExceptionszh_ret_info  (in libHSrts_thr-ghc8.2.2.dylib) + 170,7  [0x11451d57a,0x11451d4d7]
+    + 2 ???  (in <unknown binary>)  [0x42050faeb0]
+    + ! 2 evacuate1  (in libHSrts_thr-ghc8.2.2.dylib) + 1461,1436  [0x11452ad45,0x11452ad2c]
+    + 2 ???  (in <unknown binary>)  [0x206000000000]
+    + ! 2 giveCapabilityToTask.isra.11  (in libHSrts_thr-ghc8.2.2.dylib) + 80  [0x1144f0590]
+    + !   2 signalCondition  (in libHSrts_thr-ghc8.2.2.dylib) + 9  [0x11451b319]
+    + !     2 _pthread_cond_signal  (in libsystem_pthread.dylib) + 609  [0x7fff81343528]
+    + !       2 __psynch_cvsignal  (in libsystem_kernel.dylib) + 10  [0x7fff903a1d9e]
+    + 2 base_GHCziBase_zpzp_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0,80  [0x11361c5a0,0x11361c5f0]
+    + 2 base_GHCziIOziBufferedIO_flushWriteBuffer_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x1136dd254]
+    + 2 base_GHCziIOziHandleziInternals_zdwwithHandlezq_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 20,40  [0x11372d3b4,0x11372d3c8]
+    + 2 base_GHCziIOziHandleziText_zdwhPutChar_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 34,29  [0x113731f8a,0x113731f85]
+    + 2 c7p8_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 27,7  [0x1136f924b,0x1136f9237]
+    + 2 cb8i_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4,0  [0x11370b16c,0x11370b168]
+    + 2 cc4W_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 19  [0x113710fc3]
+    + 2 cdSl_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 81,7  [0x113728059,0x11372800f]
+    + 2 cdU9_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 180  [0x1137283fc]
+    + 2 cdVm_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 11,7  [0x113727ed3,0x113727ecf]
+    + 2 cdrl_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 23,11  [0x113724c2f,0x113724c23]
+    + 2 ceBL_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 11,0  [0x11372d363,0x11372d358]
+    + 2 ceOH_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 17,65  [0x11372efd9,0x11372f009]
+    + 2 cev2_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 11,0  [0x11372c8e3,0x11372c8d8]
+    + 2 cev4_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 56,33  [0x11372c890,0x11372c879]
+    + 2 chR9_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 25,11  [0x113731eb1,0x113731ea3]
+    + 2 chSu_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 20,0  [0x113732014,0x113732000]
+    + 2 s95K_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 20,81  [0x11380410c,0x113804149]
+    + 2 s9bn_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0,4  [0x113808a00,0x113808a04]
+    + 2 sdfB_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 13,20  [0x11372eab5,0x11372eabc]
+    + 2 stg_ap_p_info  (in libHSrts_thr-ghc8.2.2.dylib) + 27,565  [0x114525dcb,0x114525fe5]
+    + 2 stg_ap_stk_ppp  (in libHSrts_thr-ghc8.2.2.dylib) + 4,0  [0x1145289e4,0x1145289e0]
+    + 2 stg_enter_info  (in libHSrts_thr-ghc8.2.2.dylib) + 15,57  [0x11451e17f,0x11451e1a9]
+    + 2 stg_gc_noregs  (in libHSrts_thr-ghc8.2.2.dylib) + 264  [0x11451e0d0]
+    + 1 DYLD-STUB$$pthread_mutex_lock  (in libHSrts_thr-ghc8.2.2.dylib) + 0  [0x114530d34]
+    + 1 DYLD-STUB$$resumeThread  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x113953f5e]
+    + 1 DYLD-STUB$$write  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x113954264]
+    + 1 StgReturn  (in libHSrts_thr-ghc8.2.2.dylib) + 14  [0x11450556b]
+    + 1 base_DataziIORef_mkWeakIORef_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x113567958]
+    + 1 base_ForeignziCziError_throwErrnoIfMinus1RetryMayBlock2_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x1135e1b60]
+    + 1 base_GHCziBase_zdfMonadIO1_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 20  [0x113619404]
+    + 1 base_GHCziBase_zgzgze_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 20  [0x113617114]
+    + 1 base_GHCziIOziFD_zdfBufferedIOFD16_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x11370aa98]
+    + 1 base_GHCziIOziHandleziInternals_zdwwantWritableHandlezq_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x11372f310]
+    + 1 base_GHCziIOziHandleziInternals_zdwwriteCharBuffer_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 159  [0x113727dcf]
+    + 1 base_GHCziIOziHandleziText_hPutStr2_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 20  [0x1137435f4]
+    + 1 base_GHCziIOziHandleziTypes_FileHandle_con_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 3  [0x11374ccbb]
+    + 1 base_GHCziShow_showSignedInt_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 31  [0x1137f2e57]
+    + 1 base_GHCziShow_show_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x1137f1b6c]
+    + 1 base_GHCziShow_zdfShowZLz2cUZRzuzdsgo1_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 13  [0x113803ffd]
+    + 1 base_GHCziShow_zdwitoszq_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 107  [0x1137f2983]
+    + 1 c2pw_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x1136dd29c]
+    + 1 c6Cg_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 25  [0x1135e1c49]
+    + 1 c8Lj_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x113619430]
+    + 1 c9Wz_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x113620608]
+    + 1 cbaQ_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 73  [0x11370b289]
+    + ! 1 rtsSupportsBoundThreads  (in libHSrts_thr-ghc8.2.2.dylib) + 0  [0x1145070d0]
+    + 1 cdSM_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 12  [0x1137282c4]
+    + 1 cdSR_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 4  [0x113728584]
+    + 1 cdSv_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x113727f50]
+    + 1 cdTN_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 141  [0x1137284cd]
+    + 1 cdVo_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 7  [0x113727df7]
+    + 1 cdrj_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x113724c58]
+    + 1 cdrs_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x113724b98]
+    + 1 ceBJ_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 7  [0x11372d337]
+    + 1 chQP_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 60  [0x113731d44]
+    + 1 chTY_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x113732198]
+    + 1 ckfM_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x1137436e0]
+    + 1 isAlive  (in libHSrts_thr-ghc8.2.2.dylib) + 74  [0x114510aba]
+    + 1 s7dN_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 26  [0x1136f8622]
+    + 1 s95M_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x1138041e0]
+    + 1 saHd_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x11370ac28]
+    + 1 sdaa_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 35  [0x11372d2eb]
+    + 1 sgFY_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 0  [0x113731bb8]
+    + 1 stg_BLACKHOLE_info  (in libHSrts_thr-ghc8.2.2.dylib) + 4  [0x11452257c]
+    + 1 stg_IND_STATIC_info  (in libHSrts_thr-ghc8.2.2.dylib) + 4  [0x11452255c]
+    + 1 stg_ap_3_upd_info  (in libHSrts_thr-ghc8.2.2.dylib) + 4  [0x11452426c]
+    + 1 stg_ap_ppv_fast  (in libHSrts_thr-ghc8.2.2.dylib) + 369  [0x114529c09]
+    + 1 stg_ap_pv_info  (in libHSrts_thr-ghc8.2.2.dylib) + 27  [0x1145260c3]
+    + 1 stg_ap_stk_pp  (in libHSrts_thr-ghc8.2.2.dylib) + 4  [0x11452876c]
+    + 1 stg_catchzh  (in libHSrts_thr-ghc8.2.2.dylib) + 42  [0x11451db3a]
+    + 1 stg_newMutVarzh  (in libHSrts_thr-ghc8.2.2.dylib) + 0  [0x11451fda8]
+    + 1 stg_returnToSchedNotPaused  (in libHSrts_thr-ghc8.2.2.dylib) + 0  [0x114523148]
+    + 1 stg_returnToStackTop  (in libHSrts_thr-ghc8.2.2.dylib) + 89  [0x1145230e9]
+    + 1 stg_stk_save_pn  (in libHSrts_thr-ghc8.2.2.dylib) + 8  [0x114528740]
+    + 1 waitForCapability  (in libHSrts_thr-ghc8.2.2.dylib) + 335  [0x1144f139f]
+    +   1 pthread_mutex_unlock  (in libsystem_pthread.dylib) + 0  [0x7fff813427e1]
+    2695 Thread_1168750
+    + 2695 c8Ix_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib) + 175  [0x1139359a7]
+    +   2695 poll  (in libsystem_kernel.dylib) + 10  [0x7fff903a32a2]
+    2695 Thread_1185203
+      2692 thread_start  (in libsystem_pthread.dylib) + 13  [0x7fff81342351]
+      ! 2692 _pthread_start  (in libsystem_pthread.dylib) + 168  [0x7fff8134491a]
+      !   2692 _pthread_body  (in libsystem_pthread.dylib) + 131  [0x7fff8134499d]
+      !     2692 scheduleWorker  (in libHSrts_thr-ghc8.2.2.dylib) + 12  [0x11450276c]
+      !       2690 schedule  (in libHSrts_thr-ghc8.2.2.dylib) + 792  [0x114500d98]
+      !       : 2690 yieldCapability  (in libHSrts_thr-ghc8.2.2.dylib) + 395  [0x1144f158b]
+      !       :   2690 waitCondition  (in libHSrts_thr-ghc8.2.2.dylib) + 9  [0x11451b339]
+      !       :     2689 _pthread_cond_wait  (in libsystem_pthread.dylib) + 767  [0x7fff81345728]
+      !       :     | 2689 __psynch_cvwait  (in libsystem_kernel.dylib) + 10  [0x7fff903a1db6]
+      !       :     1 _pthread_cond_wait  (in libsystem_pthread.dylib) + 786  [0x7fff8134573b]
+      !       :       1 OSSpinLockLock  (in libsystem_platform.dylib) + 11  [0x7fff94a771f8]
+      !       1 schedule  (in libHSrts_thr-ghc8.2.2.dylib) + 3473  [0x114501811]
+      !       : 1 interpretBCO  (in libHSrts_thr-ghc8.2.2.dylib) + 1093  [0x1144f5145]
+      !       1 schedule  (in libHSrts_thr-ghc8.2.2.dylib) + 1328  [0x114500fb0]
+      1 ???  (in <unknown binary>)  [0x206000000000]
+      ! 1 giveCapabilityToTask.isra.11  (in libHSrts_thr-ghc8.2.2.dylib) + 80  [0x1144f0590]
+      !   1 signalCondition  (in libHSrts_thr-ghc8.2.2.dylib) + 9  [0x11451b319]
+      !     1 _pthread_cond_signal  (in libsystem_pthread.dylib) + 609  [0x7fff81343528]
+      !       1 __psynch_cvsignal  (in libsystem_kernel.dylib) + 10  [0x7fff903a1d9e]
+      1 stg_PAP_apply  (in libHSrts_thr-ghc8.2.2.dylib) + 122  [0x11451c1da]
+      1 stg_ap_v_info  (in libHSrts_thr-ghc8.2.2.dylib) + 0  [0x114524620]
+
+Total number in stack (recursive counted multiple, when >=5):
+        7       __error  (in libsystem_kernel.dylib) + 0  [0x7fff9039c7b5]
+        7       __psynch_cvwait  (in libsystem_kernel.dylib) + 0  [0x7fff903a1dac]
+        6       _pthread_cond_wait  (in libsystem_pthread.dylib) + 767  [0x7fff81345728]
+        6       waitCondition  (in libHSrts_thr-ghc8.2.2.dylib) + 9  [0x11451b339]
+        5       poll  (in libsystem_kernel.dylib) + 0  [0x7fff903a3298]
+        5       threadPaused  (in libHSrts_thr-ghc8.2.2.dylib) + 0  [0x1145063e0]
+
+Sort by top of stack, same collapsed (when >= 5):
+        __psynch_cvwait  (in libsystem_kernel.dylib)        5782
+        poll  (in libsystem_kernel.dylib)        3805
+        __semwait_signal  (in libsystem_kernel.dylib)        2675
+        kevent  (in libsystem_kernel.dylib)        2675
+        write  (in libsystem_kernel.dylib)        447
+        interpretBCO  (in libHSrts_thr-ghc8.2.2.dylib)        95
+        threadPaused  (in libHSrts_thr-ghc8.2.2.dylib)        93
+        fdReady  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        21
+        stg_PAP_apply  (in libHSrts_thr-ghc8.2.2.dylib)        19
+        stg_ap_v_info  (in libHSrts_thr-ghc8.2.2.dylib)        16
+        stg_upd_frame_info  (in libHSrts_thr-ghc8.2.2.dylib)        16
+        schedule  (in libHSrts_thr-ghc8.2.2.dylib)        15
+        __error  (in libsystem_kernel.dylib)        14
+        resumeThread  (in libHSrts_thr-ghc8.2.2.dylib)        14
+        base_GHCziIOziEncodingziUTF8_mkUTF1_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        13
+        nanosleep  (in libsystem_c.dylib)        11
+        stg_ap_p_fast  (in libHSrts_thr-ghc8.2.2.dylib)        11
+        pthread_mutex_unlock  (in libsystem_pthread.dylib)        10
+        base_GHCziIOziFD_zdwwriteRawBufferPtr_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        9
+        cbaH_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        9
+        pthread_mutex_lock  (in libsystem_pthread.dylib)        9
+        saHF_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        9
+        stg_ap_pp_info  (in libHSrts_thr-ghc8.2.2.dylib)        9
+        cdVt_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        8
+        chR0_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        8
+        base_GHCziIOziFD_zdfBufferedIOFD16_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        7
+        base_GHCziIOziHandleziInternals_zdwdozuoperation_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        7
+        c7p8_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        7
+        cdT8_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        7
+        ceBC_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        7
+        ceMJ_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        7
+        evacuate1  (in libHSrts_thr-ghc8.2.2.dylib)        7
+        maybePerformBlockedException  (in libHSrts_thr-ghc8.2.2.dylib)        7
+        stg_putMVarzh  (in libHSrts_thr-ghc8.2.2.dylib)        7
+        suspendThread  (in libHSrts_thr-ghc8.2.2.dylib)        7
+        cbaQ_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        6
+        chUj_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        6
+        stg_ap_v_fast  (in libHSrts_thr-ghc8.2.2.dylib)        6
+        stg_takeMVarzh  (in libHSrts_thr-ghc8.2.2.dylib)        6
+        stg_unmaskAsyncExceptionszh_ret_info  (in libHSrts_thr-ghc8.2.2.dylib)        6
+        base_GHCziIOziHandleziTypes_FileHandle_con_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        5
+        cbcY_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        5
+        cdSM_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        5
+        cdSl_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        5
+        cdU9_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        5
+        cdVm_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        5
+        ceOH_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        5
+        chTY_info  (in libHSbase-4.10.1.0-ghc8.2.2.dylib)        5
+        evacuate  (in libHSrts_thr-ghc8.2.2.dylib)        5
+        stg_BLACKHOLE_info  (in libHSrts_thr-ghc8.2.2.dylib)        5
+
+Binary Images:
+       0x10c637000 -        0x10c750ff7 +ghc (???) <DAF23FF5-8CCA-3A09-9ADB-22D384EB46EC> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/bin/ghc
+       0x10c825000 -        0x10c917fe7 +libHShaskeline-0.7.4.0-ghc8.2.2.dylib (0) <D4857B48-31D8-3370-9776-CED56F9A502B> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/haskeline-0.7.4.0/libHShaskeline-0.7.4.0-ghc8.2.2.dylib
+       0x10ca3b000 -        0x10fd17ff7 +libHSghc-8.2.2-ghc8.2.2.dylib (0) <F12832C5-1708-3BC2-984D-E416EA1A7D4C> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/ghc-8.2.2/libHSghc-8.2.2-ghc8.2.2.dylib
+       0x111f46000 -        0x111f5dff7 +libHSterminfo-0.4.1.0-ghc8.2.2.dylib (0) <FC2D5615-70EA-3659-BB03-0BCFAFBA92C5> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/terminfo-0.4.1.0/libHSterminfo-0.4.1.0-ghc8.2.2.dylib
+       0x111f94000 -        0x111fe0ff8 +libHShoopl-3.10.2.2-ghc8.2.2.dylib (0) <EF6194FC-8C98-3420-92E3-03C4F8BD579C> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/hoopl-3.10.2.2/libHShoopl-3.10.2.2-ghc8.2.2.dylib
+       0x11205e000 -        0x1121c2fff +libHSghci-8.2.2-ghc8.2.2.dylib (0) <8E823E64-4269-3F07-9F99-5D6104C215C6> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/ghci-8.2.2/libHSghci-8.2.2-ghc8.2.2.dylib
+       0x112341000 -        0x112393fff +libHSghc-boot-8.2.2-ghc8.2.2.dylib (0) <81AA6320-85FB-36EE-9794-6EFEB19A4BE2> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/ghc-boot-8.2.2/libHSghc-boot-8.2.2-ghc8.2.2.dylib
+       0x1123f4000 -        0x11247affe +libHStransformers-0.5.2.0-ghc8.2.2.dylib (0) <548C1BE7-AA58-30DC-9722-27E159CA5227> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/transformers-0.5.2.0/libHStransformers-0.5.2.0-ghc8.2.2.dylib
+       0x112562000 -        0x11257affa +libHShpc-0.6.0.3-ghc8.2.2.dylib (0) <97A77BE5-C6A8-3AD9-B500-B02570EAB6B2> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/hpc-0.6.0.3/libHShpc-0.6.0.3-ghc8.2.2.dylib
+       0x1125a3000 -        0x112776ffa +libHStemplate-haskell-2.12.0.0-ghc8.2.2.dylib (0) <2AD75E12-704F-35AA-8B92-916AE85C1BCD> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/template-haskell-2.12.0.0/libHStemplate-haskell-2.12.0.0-ghc8.2.2.dylib
+       0x1129b5000 -        0x1129ebffe +libHSpretty-1.1.3.3-ghc8.2.2.dylib (0) <9A94F3F6-3E25-39CA-BC8D-876D1CDC967A> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/pretty-1.1.3.3/libHSpretty-1.1.3.3-ghc8.2.2.dylib
+       0x112a41000 -        0x112a50ff8 +libHSghc-boot-th-8.2.2-ghc8.2.2.dylib (0) <05806CC7-7D67-3836-BCD0-C382B855A51D> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/ghc-boot-th-8.2.2/libHSghc-boot-th-8.2.2-ghc8.2.2.dylib
+       0x112a81000 -        0x112ae7ff8 +libHSbinary-0.8.5.1-ghc8.2.2.dylib (0) <9619B777-3BEB-3DBE-B4F9-46962E0D1FC4> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/binary-0.8.5.1/libHSbinary-0.8.5.1-ghc8.2.2.dylib
+       0x112b56000 -        0x112b78fff +libHSprocess-1.6.1.0-ghc8.2.2.dylib (0) <A4F45180-E875-3619-B4CC-8622134AC422> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/process-1.6.1.0/libHSprocess-1.6.1.0-ghc8.2.2.dylib
+       0x112ba4000 -        0x112bc7ffd +libHSdirectory-1.3.0.2-ghc8.2.2.dylib (0) <619AF49D-FC26-3F41-93F9-DDBA41B03036> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/directory-1.3.0.2/libHSdirectory-1.3.0.2-ghc8.2.2.dylib
+       0x112bfe000 -        0x112c55ff7 +libHSunix-2.7.2.2-ghc8.2.2.dylib (0) <A3C2CC86-FB04-3001-BA86-CC3786DE17F8> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/unix-2.7.2.2/libHSunix-2.7.2.2-ghc8.2.2.dylib
+       0x112d16000 -        0x112d27ff9 +libHSfilepath-1.4.1.2-ghc8.2.2.dylib (0) <2EDD6D11-BB4C-3FAF-87ED-D799FE3EF39A> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/filepath-1.4.1.2/libHSfilepath-1.4.1.2-ghc8.2.2.dylib
+       0x112d48000 -        0x112dcdfff +libHStime-1.8.0.2-ghc8.2.2.dylib (0) <474331A8-7A1A-3DFE-BA85-885E9B30B2F8> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/time-1.8.0.2/libHStime-1.8.0.2-ghc8.2.2.dylib
+       0x112e7d000 -        0x113093ff8 +libHScontainers-0.5.10.2-ghc8.2.2.dylib (0) <E8A5635E-32BD-31A1-9D43-ECB623765533> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/containers-0.5.10.2/libHScontainers-0.5.10.2-ghc8.2.2.dylib
+       0x11321c000 -        0x1132aaff7 +libHSbytestring-0.10.8.2-ghc8.2.2.dylib (0) <4B297547-14C8-3C9A-B133-7A52CA61F77F> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/bytestring-0.10.8.2/libHSbytestring-0.10.8.2-ghc8.2.2.dylib
+       0x11334f000 -        0x113355ff8 +libHSdeepseq-1.4.3.0-ghc8.2.2.dylib (0) <9FF33502-5135-344D-B3DE-6B407CB74752> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/deepseq-1.4.3.0/libHSdeepseq-1.4.3.0-ghc8.2.2.dylib
+       0x113374000 -        0x1133c4ffd +libHSarray-0.5.2.0-ghc8.2.2.dylib (0) <016ECD6B-D5A8-3FAB-875B-289DC0011CC0> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/array-0.5.2.0/libHSarray-0.5.2.0-ghc8.2.2.dylib
+       0x113428000 -        0x113964ff7 +libHSbase-4.10.1.0-ghc8.2.2.dylib (0) <E25C24C6-4240-3BAF-90D0-6A93BB08B64B> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/base-4.10.1.0/libHSbase-4.10.1.0-ghc8.2.2.dylib
+       0x113fe6000 -        0x114075fef +libHSinteger-gmp-1.0.1.0-ghc8.2.2.dylib (0) <ADD5CC3D-7A87-3D59-A4BE-BC49F021A073> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/integer-gmp-1.0.1.0/libHSinteger-gmp-1.0.1.0-ghc8.2.2.dylib
+       0x1140a9000 -        0x114129fe7 +libHSghc-prim-0.5.1.1-ghc8.2.2.dylib (0) <3C61E0E1-2423-3CF8-8092-899E03C169C6> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/ghc-prim-0.5.1.1/libHSghc-prim-0.5.1.1-ghc8.2.2.dylib
+       0x1144ef000 -        0x114548fff +libHSrts_thr-ghc8.2.2.dylib (0) <823AE04A-5021-3DF0-8548-CCB0B9DEBECA> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/rts/libHSrts_thr-ghc8.2.2.dylib
+       0x11457e000 -        0x114581fff +libffi.dylib (7.4) <3A13A01E-D1D6-303F-BB51-997D9BAF8CCD> /Users/michaelklein/.stack/programs/x86_64-osx/ghc-8.2.2/lib/ghc-8.2.2/rts/libffi.dylib
+    0x7fff64762000 -     0x7fff64799a47  dyld (0.0 - ???) <DC81CC9D-651A-3A45-8809-928282052BD3> /usr/lib/dyld
+    0x7fff80f30000 -     0x7fff80f31ffb  libremovefile.dylib (41) <552EF39E-14D7-363E-9059-4565AC2F894E> /usr/lib/system/libremovefile.dylib
+    0x7fff81341000 -     0x7fff8134aff7  libsystem_pthread.dylib (138.10.4) <3DD1EF4C-1D1B-3ABF-8CC6-B3B1CEEE9559> /usr/lib/system/libsystem_pthread.dylib
+    0x7fff813af000 -     0x7fff81415ff7  libsystem_network.dylib (583.50.1) <B52DAB73-92DC-3DA7-B9F4-B899D66445C1> /usr/lib/system/libsystem_network.dylib
+    0x7fff82052000 -     0x7fff82054fff  libsystem_coreservices.dylib (19.2) <1B3F5AFC-FFCD-3ECB-8B9A-5538366FB20D> /usr/lib/system/libsystem_coreservices.dylib
+    0x7fff82301000 -     0x7fff82305fff  libcache.dylib (75) <9548AAE9-2AB7-3525-9ECE-A2A7C4688447> /usr/lib/system/libcache.dylib
+    0x7fff82ce3000 -     0x7fff82cebfff  libcopyfile.dylib (127) <A48637BC-F3F2-34F2-BB68-4C65FD012832> /usr/lib/system/libcopyfile.dylib
+    0x7fff82fe7000 -     0x7fff82ffeff7  libsystem_coretls.dylib (83.40.5) <C90DAE38-4082-381C-A185-2A6A8B677628> /usr/lib/system/libsystem_coretls.dylib
+    0x7fff8541c000 -     0x7fff85423ff7  libcompiler_rt.dylib (62) <A13ECF69-F59F-38AE-8609-7B731450FBCD> /usr/lib/system/libcompiler_rt.dylib
+    0x7fff8557e000 -     0x7fff8557eff7  libkeymgr.dylib (28) <8371CE54-5FDD-3CE9-B3DF-E98C761B6FE0> /usr/lib/system/libkeymgr.dylib
+    0x7fff858f2000 -     0x7fff85969feb  libcorecrypto.dylib (335.50.1) <B5C05FD7-A540-345A-87BF-8E41848A3C17> /usr/lib/system/libcorecrypto.dylib
+    0x7fff87667000 -     0x7fff87672ff7  libcommonCrypto.dylib (60075.50.1) <93732261-34B4-3914-B7A2-90A81A182DBA> /usr/lib/system/libcommonCrypto.dylib
+    0x7fff87bfa000 -     0x7fff87c11ff7  libsystem_asl.dylib (323.50.1) <41F8E11F-1BD0-3F1D-BA3A-AA1577ED98A9> /usr/lib/system/libsystem_asl.dylib
+    0x7fff87ed2000 -     0x7fff87ed4ff7  libsystem_configuration.dylib (802.40.13) <3DEB7DF9-6804-37E1-BC83-0166882FF0FF> /usr/lib/system/libsystem_configuration.dylib
+    0x7fff88311000 -     0x7fff88311ff7  liblaunch.dylib (765.50.8) <834ED605-5114-3641-AA4D-ECF31B801C50> /usr/lib/system/liblaunch.dylib
+    0x7fff88312000 -     0x7fff88323ff7  libsystem_trace.dylib (201.10.3) <1DD0C1FD-74E2-3949-9C2C-B81D19C2CA5E> /usr/lib/system/libsystem_trace.dylib
+    0x7fff89b4f000 -     0x7fff89b58ff3  libsystem_notify.dylib (150.40.1) <D48BDE34-0F7E-34CA-A0FF-C578E39987CC> /usr/lib/system/libsystem_notify.dylib
+    0x7fff8d21a000 -     0x7fff8d236ff7  libsystem_malloc.dylib (67.40.1) <5748E8B2-F81C-34C6-8B13-456213127678> /usr/lib/system/libsystem_malloc.dylib
+    0x7fff8fb9e000 -     0x7fff8fbc7fff  libsystem_info.dylib (477.50.4) <FAA9226D-64DE-3769-A6D8-6CABA4B7FF4D> /usr/lib/system/libsystem_info.dylib
+    0x7fff8fcc3000 -     0x7fff9002e657  libobjc.A.dylib (680) <D55D5807-1FBE-32A5-9105-44D7AFE68C27> /usr/lib/libobjc.A.dylib
+    0x7fff90092000 -     0x7fff90095fff  libsystem_sandbox.dylib (460.60.2) <2A68B39C-B786-3A05-87A2-56E688469FB8> /usr/lib/system/libsystem_sandbox.dylib
+    0x7fff9038b000 -     0x7fff903a9ff7  libsystem_kernel.dylib (3248.60.10) <C1A6A0B9-1869-36AB-B4A2-D862EB09A4BE> /usr/lib/system/libsystem_kernel.dylib
+    0x7fff906b9000 -     0x7fff906c1fff  libsystem_networkextension.dylib (385.40.36) <66095DC7-6539-38F2-95EE-458F15F6D014> /usr/lib/system/libsystem_networkextension.dylib
+    0x7fff90d1f000 -     0x7fff90d49ff7  libc++abi.dylib (307.2) <922EFB36-0E9E-315B-8270-E81AC43472C0> /usr/lib/libc++abi.dylib
+    0x7fff90d7d000 -     0x7fff90d7dff7  libunc.dylib (29) <DDB1E947-C775-33B8-B461-63E5EB698F0E> /usr/lib/system/libunc.dylib
+    0x7fff91993000 -     0x7fff919c2ffb  libsystem_m.dylib (3105) <08E1A4B2-6448-3DFE-A58C-ACC7335BE7E4> /usr/lib/system/libsystem_m.dylib
+    0x7fff92aaa000 -     0x7fff92af0ff7  libauto.dylib (186) <999E610F-41FC-32A3-ADCA-5EC049B65DFB> /usr/lib/libauto.dylib
+    0x7fff93206000 -     0x7fff932f8ff7  libiconv.2.dylib (44) <F05A0A5A-92A9-3668-8F20-F27CBDA26BE9> /usr/lib/libiconv.2.dylib
+    0x7fff933fc000 -     0x7fff933feff7  libquarantine.dylib (80) <0F4169F0-0C84-3A25-B3AE-E47B3586D908> /usr/lib/system/libquarantine.dylib
+    0x7fff9364a000 -     0x7fff9364fff7  libmacho.dylib (875.1) <318264FA-58F1-39D8-8285-1F6254EE410E> /usr/lib/system/libmacho.dylib
+    0x7fff939eb000 -     0x7fff939ecfff  libsystem_blocks.dylib (65) <1244D9D5-F6AA-35BB-B307-86851C24B8E5> /usr/lib/system/libsystem_blocks.dylib
+    0x7fff9467c000 -     0x7fff946adff7  libncurses.5.4.dylib (46) <D4C10699-3E8F-3F42-A695-7490EA4B6B32> /usr/lib/libncurses.5.4.dylib
+    0x7fff94876000 -     0x7fff9487effb  libsystem_dnssd.dylib (625.60.4) <80189998-32B0-316C-B5C5-53857486713D> /usr/lib/system/libsystem_dnssd.dylib
+    0x7fff94a76000 -     0x7fff94a7efef  libsystem_platform.dylib (74.40.2) <29A905EF-6777-3C33-82B0-6C3A88C4BA15> /usr/lib/system/libsystem_platform.dylib
+    0x7fff94b7c000 -     0x7fff94b7dffb  libSystem.B.dylib (1226.10.1) <ECAA07BE-A114-3461-AA13-C57838775FC2> /usr/lib/libSystem.B.dylib
+    0x7fff94c08000 -     0x7fff94c5bff7  libc++.1.dylib (120.1) <8FC3D139-8055-3498-9AC5-6467CB7F4D14> /usr/lib/libc++.1.dylib
+    0x7fff95a8e000 -     0x7fff95a8ffff  libsystem_secinit.dylib (20) <32B1A8C6-DC84-3F4F-B8CE-9A52B47C3E6B> /usr/lib/system/libsystem_secinit.dylib
+    0x7fff95cf2000 -     0x7fff95cf7ff3  libunwind.dylib (35.3) <F6EB48E5-4D12-359A-AB54-C937FBBE9043> /usr/lib/system/libunwind.dylib
+    0x7fff96237000 -     0x7fff96238fff  libDiagnosticMessagesClient.dylib (100) <4243B6B4-21E9-355B-9C5A-95A216233B96> /usr/lib/libDiagnosticMessagesClient.dylib
+    0x7fff96510000 -     0x7fff9659dfef  libsystem_c.dylib (1082.60.1) <28733D22-553E-3CBC-8D2C-EDCEB46E46AF> /usr/lib/system/libsystem_c.dylib
+    0x7fff9659e000 -     0x7fff965c7ff7  libxpc.dylib (765.50.8) <54D1328E-054E-3DAA-89E2-375722F9D18F> /usr/lib/system/libxpc.dylib
+    0x7fff966c1000 -     0x7fff966eefff  libdispatch.dylib (501.40.12) <C7499857-61A5-3D7D-A5EA-65DCC8C3DF92> /usr/lib/system/libdispatch.dylib
+    0x7fff96989000 -     0x7fff9698cffb  libdyld.dylib (360.22) <1F9FCF2C-5E94-3F2D-B4A5-1238587AA5C6> /usr/lib/system/libdyld.dylib
+Sample analysis of process 70443 written to file /dev/stdout
