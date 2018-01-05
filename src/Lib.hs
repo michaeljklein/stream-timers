@@ -32,12 +32,17 @@ import Timers (foldlOnce, sideEffectEveryN, printEveryN) -- foldrTimes,
 import Control.Monad (liftM2)
 import Data.Map.Internal.Debug (showTreeWith)
 
+-- | `CULLong`
 type ULL = CULLong
+
+-- | `Map.Map` type alias
 type Map = Map.Map
 
+-- | Easier to read than `Map.empty`, apparently
 emptyMap :: Map k a
 emptyMap = Map.empty
 
+-- | Mystery function... (read the source)
 gapless :: ULL -> Bool
 gapless z = if z == 0
                then True
@@ -45,6 +50,7 @@ gapless z = if z == 0
                then gapless  $ unsafeShiftR z 2  -- gapless (div z 2)
                else gapless' $ unsafeShiftR z 2
 
+-- | Helper function to `gapless`
 gapless' :: ULL -> Bool
 gapless' z = if z == 0
                 then True
@@ -52,35 +58,45 @@ gapless' z = if z == 0
                 then False
                 else gapless' $ unsafeShiftR z 2
 
-gaplessEq :: ULL -> Bool
-gaplessEq = liftM2 (==) gapless gapless'
 
+-- | Number of `gapless` numbers in @[1..n]@
 countGapless :: Num a => ULL -> a
 countGapless n = sum [ sum [ 1 | gapless i] | i<-[1..n]]
 
+-- | Number of `gapless'` numbers in @[1..n]@
 countGapless' :: Num a => ULL -> a
 countGapless' n = sum [ sum [ 1 | gapless' i] | i<-[1..n]]
 
+-- | Are `gapless` and `gapless'` equal?
+gaplessEq :: ULL -> Bool
+gaplessEq = liftM2 (==) gapless gapless'
 
 
 
-
+-- | What it says on the box
 nextGapless :: ULL -> ULL
 nextGapless = until gapless (+1)
 
+-- | Easier to read and more specialized than @[1..]@
 streamTail ::          [ULL]
 streamTail = [1..]
 
--- | one-liner to export gapless to mathematica:
+
+-- | One-liner to export gapless to mathematica:
 --
 -- @
 --  concatMap (\x->concat["{",show(head x),",",show(length x),"},"]).group . (\x->zipWith(-)(tail x)x) . onlyGapless $ [1..100]
 -- @
 --
--- See only_gapless.md
+-- See @only_gapless.md@
 onlyGapless ::         [ULL] -> [ULL]
 onlyGapless = filter gapless
 
+-- | First differences:
+--
+-- @
+--  [x0, x1, x2, x3..] -> [x1 - x0, x2 - x1, x3 - x2..]
+-- @
 differences :: Num a => [a] -> [a]
 differences = zipWith (-) =<< tail
 

@@ -29,7 +29,6 @@ main = do
     ]
     ]
 
-
 isSuccess :: Result -> Bool
 isSuccess (Success _ _ _) = True
 isSuccess  _              = False

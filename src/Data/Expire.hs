@@ -3,14 +3,19 @@
 {-# LANGUAGE InstanceSigs #-}
 
 module Data.Expire
-  (
+  (   expireSteps,
       Expire(..),
       ExpireIO(..),
+      stepExpire,
+      stepExpireMaybe,
+      coerceWeak,
       getExpireIO,
       dumpExpireIO,
       killExpireIO,
       ExpireE(..)
   ) where
+
+
 
 import Control.Monad
 import Data.IORef
@@ -22,7 +27,7 @@ import Unsafe.Coerce
 -- The idea is that the monad will throw some sort of exception, or result in `Nothing`,
 -- when more than this many `Functor`, `Applicative`, or `Monad` steps (actions) have been taken.
 expireSteps :: Int
-expireSteps = 1
+expireSteps = 10
 
 
 -- | Pure expiration, return `Nothing` to expire
@@ -32,12 +37,6 @@ instance Applicative Expire where
   pure = Expire . (expireSteps,) . Just
 
   (~(Expire (_, f))) <*> (~(Expire (xi, x))) = maybe (Expire (0, Nothing)) (\y -> Expire $! if xi <= 0 then (0, Nothing) else (xi - 1, Just y)) $! f <*> x
-                                         -- then Expire (0, Nothing)
-                                         -- else Expire (abs xi - 1, f <*> x)
-    -- where
-      -- i = xi
-  -- Expire (_ , _) <*> Expire (0 , _) = Expire (0, Nothing)
-  -- Expire (_ , f) <*> Expire (xi, x) = Expire (abs xi - 1, f <*> x)
 
 instance Monad Expire where
   return = pure
@@ -105,6 +104,7 @@ stepExpireMaybe i ~(Just x) = stepExpire i x
 -- | Note: This is only safe if a `Weak` pointer has _already_ been dereferenced
 coerceWeak :: Weak a -> Weak b
 coerceWeak = unsafeCoerce
+
 
 
 instance Functor ExpireIO where
