@@ -1,7 +1,7 @@
 {-# LANGUAGE RankNTypes #-}
 
-module Lib
-    ( ULL,
+module Data.Timers.Example
+    ( CULLong,
       Map,
       gapless,
       gapless',
@@ -27,23 +27,15 @@ module Lib
 
 import Data.Bits ((.&.), unsafeShiftR)
 import Foreign.C.Types (CULLong)
+import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Timers (foldlOnce, sideEffectEveryN, printEveryN) -- foldrTimes,
+import Data.Timers (foldlOnce, sideEffectEveryN, printEveryN) -- foldrTimes,
 import Control.Monad (liftM2)
 import Data.Map.Internal.Debug (showTreeWith)
 
--- | `CULLong`
-type ULL = CULLong
-
--- | `Map.Map` type alias
-type Map = Map.Map
-
--- | Easier to read than `Map.empty`, apparently
-emptyMap :: Map k a
-emptyMap = Map.empty
 
 -- | Mystery function... (read the source)
-gapless :: ULL -> Bool
+gapless :: CULLong -> Bool
 gapless z = if z == 0
                then True
                else if 3 .&. z == 0              -- if mod z 4 == 0
@@ -51,7 +43,7 @@ gapless z = if z == 0
                else gapless' $ unsafeShiftR z 2
 
 -- | Helper function to `gapless`
-gapless' :: ULL -> Bool
+gapless' :: CULLong -> Bool
 gapless' z = if z == 0
                 then True
                 else if 3 .&. z == 0
@@ -60,25 +52,25 @@ gapless' z = if z == 0
 
 
 -- | Number of `gapless` numbers in @[1..n]@
-countGapless :: Num a => ULL -> a
+countGapless :: Num a => CULLong -> a
 countGapless n = sum [ sum [ 1 | gapless i] | i<-[1..n]]
 
 -- | Number of `gapless'` numbers in @[1..n]@
-countGapless' :: Num a => ULL -> a
+countGapless' :: Num a => CULLong -> a
 countGapless' n = sum [ sum [ 1 | gapless' i] | i<-[1..n]]
 
 -- | Are `gapless` and `gapless'` equal?
-gaplessEq :: ULL -> Bool
+gaplessEq :: CULLong -> Bool
 gaplessEq = liftM2 (==) gapless gapless'
 
 
 
 -- | What it says on the box
-nextGapless :: ULL -> ULL
+nextGapless :: CULLong -> CULLong
 nextGapless = until gapless (+1)
 
 -- | Easier to read and more specialized than @[1..]@
-streamTail ::          [ULL]
+streamTail ::          [CULLong]
 streamTail = [1..]
 
 
@@ -89,7 +81,7 @@ streamTail = [1..]
 -- @
 --
 -- See @only_gapless.md@
-onlyGapless ::         [ULL] -> [ULL]
+onlyGapless ::         [CULLong] -> [CULLong]
 onlyGapless = filter gapless
 
 -- | First differences:
@@ -102,50 +94,50 @@ differences = zipWith (-) =<< tail
 
 
 -- | Warning, this function is incomplete.
-getRuns  ::            [ULL] -> [ULL]
+getRuns  ::            [CULLong] -> [CULLong]
 getRuns    (1:xs) =     getRuns        xs
 getRuns    (_:xs) =     getRuns'  1    xs
 getRuns     _     = error "getRuns: [] is undefined"
 
 -- | A "match [] first" version of `getRuns`
-getRunsA  ::            [ULL] -> [ULL]
+getRunsA  ::            [CULLong] -> [CULLong]
 getRunsA      []    =     []
 getRunsA     (1:xs) =     getRunsA        xs
 getRunsA    ~(_:xs) =     getRuns'A  1    xs
 
 -- | A "match [] last" version of `getRuns`
-getRunsB  ::            [ULL] -> [ULL]
+getRunsB  ::            [CULLong] -> [CULLong]
 getRunsB    (1:xs) =     getRunsB        xs
 getRunsB    (_:xs) =     getRuns'B  1    xs
 getRunsB     _     =     []
 
 
 -- | Warning, this function is incomplete.
-getRuns' :: ULL -> [ULL] -> [ULL]
+getRuns' :: CULLong -> [CULLong] -> [CULLong]
 getRuns' n (1:xs) = n : getRuns        xs
 getRuns' n (_:xs) =     getRuns' (n+1) xs
 getRuns' _  _     = error "getRuns' _ [] is undefined"
 
 -- | A "match [] first" version of `getRuns'`
-getRuns'A :: ULL -> [ULL] -> [ULL]
+getRuns'A :: CULLong -> [CULLong] -> [CULLong]
 getRuns'A _   []    = []
 getRuns'A n  (1:xs) = n : getRunsA        xs
 getRuns'A n ~(_:xs) =     getRuns'A (n+1) xs
 
 -- | A "match [] last" version of `getRuns'`
-getRuns'B :: ULL -> [ULL] -> [ULL]
+getRuns'B :: CULLong -> [CULLong] -> [CULLong]
 getRuns'B n (1:xs) = n : getRunsB        xs
 getRuns'B n (_:xs) =     getRuns'B (n+1) xs
 getRuns'B _  _     = []
 
 
 -- | More readable (and specialized) than @zip [0..]@
-notePosition :: [ULL] -> [(ULL, ULL)]
+notePosition :: [CULLong] -> [(CULLong, CULLong)]
 notePosition = (zip [0..] :: (Enum a, Num a) => [b] -> [(a, b)])
 
-addPosition :: (ULL, ULL)                                              -- ^ (position, value)
-            -> Map ULL ((ULL,ULL,ULL,ULL,ULL),[(ULL,ULL,ULL,ULL,ULL)]) -- ^ Map Value (last input position, list of its previous runs)
-            -> Map ULL ((ULL,ULL,ULL,ULL,ULL),[(ULL,ULL,ULL,ULL,ULL)]) -- ^ Map Value (new  input position, list of its previous runs)
+addPosition :: (CULLong, CULLong)                                              -- ^ (position, value)
+            -> Map CULLong ((CULLong,CULLong,CULLong,CULLong,CULLong),[(CULLong,CULLong,CULLong,CULLong,CULLong)]) -- ^ Map Value (last input position, list of its previous runs)
+            -> Map CULLong ((CULLong,CULLong,CULLong,CULLong,CULLong),[(CULLong,CULLong,CULLong,CULLong,CULLong)]) -- ^ Map Value (new  input position, list of its previous runs)
 addPosition (position, value) posMap = Map.insertWith posValInsert value ((position,0,0,0,0),[]) posMap
 
 -- Some code, I believe an alternate attempt/pseudocode/practice
@@ -157,25 +149,25 @@ addPosition (position, value) posMap = Map.insertWith posValInsert value ((posit
 --     newRun    = (pos1,pos2,pos3,pos4,pos5)
 --     positions = (     pos2,pos3,pos4,pos5)
 -- @
-posValInsert :: ((ULL,ULL,ULL,ULL,ULL),[(ULL,ULL,ULL,ULL,ULL)]) ->
-                ((ULL,ULL,ULL,ULL,ULL),[(ULL,ULL,ULL,ULL,ULL)]) ->
-                ((ULL,ULL,ULL,ULL,ULL),[(ULL,ULL,ULL,ULL,ULL)])
+posValInsert :: ((CULLong,CULLong,CULLong,CULLong,CULLong),[(CULLong,CULLong,CULLong,CULLong,CULLong)]) ->
+                ((CULLong,CULLong,CULLong,CULLong,CULLong),[(CULLong,CULLong,CULLong,CULLong,CULLong)]) ->
+                ((CULLong,CULLong,CULLong,CULLong,CULLong),[(CULLong,CULLong,CULLong,CULLong,CULLong)])
 
 posValInsert ((pos6,_,_,_,_),_) ((pos1,pos2,pos3,pos4,pos5), pastRuns) = if newRun `elem` pastRuns || 0 `elem` [pos1,pos2,pos3,pos4,pos5,pos6]
                                                                             then (positions,          pastRuns)
                                                                             else (positions, newRun : pastRuns)
   where
-    newRun    :: (ULL, ULL, ULL, ULL, ULL)
+    newRun    :: (CULLong, CULLong, CULLong, CULLong, CULLong)
     newRun    = (pos2-pos1,pos3-pos2,pos4-pos3,pos5-pos4,pos6-pos5)
 
-    positions :: (ULL, ULL, ULL, ULL, ULL)
+    positions :: (CULLong, CULLong, CULLong, CULLong, CULLong)
     positions = (pos2     ,pos3     ,pos4     ,pos5     ,pos6     )
 
 
 
 
 
-printMap :: forall a1 a. (a1, Map ULL (a, [(ULL, ULL, ULL, ULL, ULL)])) -> IO ()
+printMap :: forall a1 a. (a1, Map CULLong (a, [(CULLong, CULLong, CULLong, CULLong, CULLong)])) -> IO ()
 printMap = putStrLn . showTreeWith (\k x -> show (k, snd x)) True False . snd
 
 ----- Ahhhhh need differences in positions of differences..
@@ -185,17 +177,17 @@ printMap = putStrLn . showTreeWith (\k x -> show (k, snd x)) True False . snd
 
 
 
-theStream :: ([(ULL, ULL)], Lib.Map k a1)
+theStream :: ([(CULLong, CULLong)], Map k a1)
 theStream = baseMap . notePosition . getRuns . differences . onlyGapless $ streamTail
   where
     baseMap :: a -> (a, Map k' a1')
-    baseMap = flip (,) emptyMap
+    baseMap = flip (,) Map.empty
 
 
-printEveryNOfStream :: Int -> IO ([(Lib.ULL, Lib.ULL)], Lib.Map Lib.ULL ((Lib.ULL, Lib.ULL, Lib.ULL, Lib.ULL, Lib.ULL), [(Lib.ULL, Lib.ULL, Lib.ULL, Lib.ULL, Lib.ULL)]))
+printEveryNOfStream :: Int -> IO ([(CULLong, CULLong)], Map CULLong ((CULLong, CULLong, CULLong, CULLong, CULLong), [(CULLong, CULLong, CULLong, CULLong, CULLong)]))
 printEveryNOfStream n = printEveryN (foldlOnce addPosition) n theStream
 
-returnEveryN :: Int -> IO ([(ULL, ULL)], Map ULL ((ULL, ULL, ULL, ULL, ULL), [(ULL, ULL, ULL, ULL, ULL)]))
+returnEveryN :: Int -> IO ([(CULLong, CULLong)], Map CULLong ((CULLong, CULLong, CULLong, CULLong, CULLong), [(CULLong, CULLong, CULLong, CULLong, CULLong)]))
 returnEveryN n = sideEffectEveryN printMap (foldlOnce addPosition) n theStream
 
 

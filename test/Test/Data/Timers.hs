@@ -1,12 +1,13 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module Test.Timers ( prop_nestPlus
-                   , prop_nestMPlus
-                   , prop_nestByMPlus
-                   , testTimers
-                   ) where
+module Test.Data.Timers
+  ( prop_nestPlus
+  , prop_nestMPlus
+  , prop_nestByMPlus
+  , testTimers
+  ) where
 
-import Timers
+import Data.Timers
 import Control.Monad
 import Test.QuickCheck
 import Data.Maybe

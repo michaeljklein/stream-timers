@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import Data.Timers.Example
 import System.Environment (getArgs)
 
 

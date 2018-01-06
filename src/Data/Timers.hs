@@ -1,5 +1,5 @@
 
-module Timers
+module Data.Timers
     ( foldrOnce,
       foldrTimes,
       foldlOnce,

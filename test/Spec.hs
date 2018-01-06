@@ -1,13 +1,14 @@
 module Main where
 
-import Lib
-import Test.Lib
-import Test.Timers
-import Criterion.Main
-import Test.QuickCheck
-import Control.Monad
-import Foreign.C.Types
 
+import Control.Monad
+import Criterion.Main
+import Data.Timers.Example (getRuns, getRuns', getRunsA, getRunsB, getRuns'A, getRuns'B)
+import Foreign.C.Types
+import Test.Data.Expire ()
+import Test.Data.Timers
+import Test.Data.Timers.Example ()
+import Test.QuickCheck
 
 main :: IO ()
 main = do
@@ -33,10 +34,10 @@ isSuccess :: Result -> Bool
 isSuccess (Success _ _ _) = True
 isSuccess  _              = False
 
-benchGetRuns :: ([ULL] -> [ULL]) -> ([ULL] -> [ULL]) -> IO Bool
+benchGetRuns :: ([CULLong] -> [CULLong]) -> ([CULLong] -> [CULLong]) -> IO Bool
 benchGetRuns x y = fmap isSuccess . quickCheckWithResult (stdArgs { chatty = False }) $ liftM2 (==) (x . fmap CULLong) (y . fmap CULLong)
 
-benchGetRuns' :: (ULL -> [ULL] -> [ULL]) -> (ULL -> [ULL] -> [ULL]) -> IO Bool
+benchGetRuns' :: (CULLong -> [CULLong] -> [CULLong]) -> (CULLong -> [CULLong] -> [CULLong]) -> IO Bool
 benchGetRuns' x y = fmap isSuccess . quickCheckWithResult (stdArgs { chatty = False }) $ \z -> liftM2 (==) (x (CULLong z) . fmap CULLong) (y (CULLong z) . fmap CULLong)
 
 
