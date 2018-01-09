@@ -55,7 +55,6 @@ import qualified Data.Vector.Fixed as FV
 
 
 -- | Mystery function... (read the source)
--- {-# SPECIALIZE gapless :: CULLong -> Bool #-}
 gapless :: (Bits t, Num t) => t -> Bool
 gapless z = if z == 0
                then True
@@ -64,7 +63,6 @@ gapless z = if z == 0
                else gapless' $ unsafeShiftR z 2
 
 -- | Helper function to `gapless`
--- {-# SPECIALIZE gapless' :: CULLong -> Bool #-}
 gapless' :: (Bits t, Num t) => t -> Bool
 gapless' z = if z == 0
                 then True
@@ -74,27 +72,20 @@ gapless' z = if z == 0
 
 
 -- | Number of `gapless` numbers in @[1..n]@
--- {-# SPECIALIZE countGapless :: Num a => CULLong -> a #-}
 countGapless :: (Bits a, Enum a, Num a, Num b) => a -> b
 countGapless n = sum [ sum [ 1 | gapless i] | i<-[1..n]]
 
 -- | Number of `gapless'` numbers in @[1..n]@
--- {-# SPECIALIZE countGapless' :: Num a => CULLong -> a #-}
 countGapless' :: (Bits a, Enum a, Num a, Num b) => a -> b
 countGapless' n = sum [ sum [ 1 | gapless' i] | i<-[1..n]]
 
 -- | Are `gapless` and `gapless'` equal?
--- {-# SPECIALIZE gaplessEq :: CULLong -> Bool #-}
 gaplessEq :: (Bits a, Num a) => a -> Bool
 gaplessEq = liftM2 (==) gapless gapless'
 
-
-
 -- | What it says on the box
--- {-# SPECIALIZE nextGapless :: CULLong -> CULLong #-}
 nextGapless :: (Bits a, Num a) => a -> a
 nextGapless = until gapless (+1)
-
 
 -- | One-liner to export gapless to mathematica:
 --
@@ -103,17 +94,22 @@ nextGapless = until gapless (+1)
 -- @
 --
 -- See @only_gapless.md@
--- {-# SPECIALIZE onlyGapless :: [CULLong] -> [CULLong] #-}
+--
 onlyGapless :: (Bits t, Num t) => [t] -> [t]
 onlyGapless = filter gapless
 
+-- See @only_gapless.md@ for results of:
+--
+-- @
+-- onlyGaplessMathematica [1..100]
+-- @
+--
 -- | `onlyGapless`, differences, grouped, then converted to Mathematica lists.
 -- {-# SPECIALIZE onlyGaplessMathematica ::         [CULLong] -> [Char] #-}
 onlyGaplessMathematica :: (Bits t, Num t, Show t) => [t] -> String
 onlyGaplessMathematica = toMathematica . group . differences . onlyGapless
 
 -- | Convert a list of lists to a list of Mathematica lists.
--- {-# SPECIALIZE toMathematica ::         [[CULLong]] -> [Char] #-}
 toMathematica :: Show a => [[a]] -> String
 toMathematica = (>>= (\x->concat["{",show(head x),",",show(length x),"},"]))
 
@@ -137,24 +133,41 @@ prop_differences_ = liftM2 (==) differences differences_
 
 
 -- | Warning, this function is incomplete.
--- {-# SPECIALIZE getRuns  ::            [CULLong] -> [CULLong] #-}
+--
+-- @
+-- λ> take 10 . getRuns . repeat $ 0 == _|_
+-- λ> take 10 . getRuns . repeat $ 1 == _|_
+-- λ> take 10 . getRuns . cycle $ [0] == _|_
+-- λ> take 10 . getRuns . cycle $ [1] == _|_
+-- λ> take 10 . getRuns . cycle $ [0,0] == _|_
+-- λ> take 10 . getRuns . cycle $ [0,1] == [1,1,1,1,1,1,1,1,1,1]
+-- λ> take 10 . getRuns . cycle $ [1,0] == [1,1,1,1,1,1,1,1,1,1]
+-- λ> take 10 . getRuns . cycle $ [1,1] == _|_
+-- λ> take 10 . getRuns . cycle $ [0,0,0] == _|_
+-- λ> take 10 . getRuns . cycle $ [0,0,1] == [2,2,2,2,2,2,2,2,2,2]
+-- λ> take 10 . getRuns . cycle $ [0,1,0] == [1,2,2,2,2,2,2,2,2,2]
+-- λ> take 10 . getRuns . cycle $ [0,1,1] == [1,1,1,1,1,1,1,1,1,1]
+-- λ> take 10 . getRuns . cycle $ [1,0,0] == [2,2,2,2,2,2,2,2,2,2]
+-- λ> take 10 . getRuns . cycle $ [1,0,1] == [1,1,1,1,1,1,1,1,1,1]
+-- λ> take 10 . getRuns . cycle $ [1,1,0] == [1,1,1,1,1,1,1,1,1,1]
+-- λ> take 10 . getRuns . cycle $ [1,1,1]
+-- @
+--
+-- It's a fun autamata, note that it must be passed an infinite list, or else it'll hit an exception.
+-- Even then, on some infinite lists, it'll loop forever without printing (if it never hits 1's).
 getRuns :: (Num a, Num b, Eq a) => [a] -> [b]
 getRuns    (1:xs) =     getRuns        xs
 getRuns    (_:xs) =     getRuns'  1    xs
 getRuns     _     = error "getRuns: [] is undefined"
 
 
-
-
 -- | A "match [] first" version of `getRuns`
--- {-# SPECIALIZE getRunsA  ::            [CULLong] -> [CULLong] #-}
 getRunsA :: (Num a, Num b, Eq a) => [a] -> [b]
 getRunsA      []    =     []
 getRunsA     (1:xs) =     getRunsA        xs
 getRunsA    ~(_:xs) =     getRuns'A  1    xs
 
 -- | A "match [] last" version of `getRuns`
--- {-# SPECIALIZE getRunsB  ::            [CULLong] -> [CULLong] #-}
 getRunsB :: (Num a, Num b, Eq a) => [a] -> [b]
 getRunsB    (1:xs) =     getRunsB        xs
 getRunsB    (_:xs) =     getRuns'B  1    xs
@@ -162,39 +175,38 @@ getRunsB     _     =     []
 
 
 -- | Warning, this function is incomplete.
--- {-# SPECIALIZE getRuns' :: CULLong -> [CULLong] -> [CULLong] #-}
 getRuns' :: (Num a, Num b, Eq a) => b -> [a] -> [b]
 getRuns' n (1:xs) = n : getRuns        xs
 getRuns' n (_:xs) =     getRuns' (n+1) xs
 getRuns' _  _     = error "getRuns' _ [] is undefined"
 
 -- | A "match [] first" version of `getRuns'`
--- {-# SPECIALIZE getRuns'A :: CULLong -> [CULLong] -> [CULLong] #-}
 getRuns'A :: (Num a, Num b, Eq a) => b -> [a] -> [b]
 getRuns'A _   []    = []
 getRuns'A n  (1:xs) = n : getRunsA        xs
 getRuns'A n ~(_:xs) =     getRuns'A (n+1) xs
 
 -- | A "match [] last" version of `getRuns'`
--- {-# SPECIALIZE getRuns'B :: CULLong -> [CULLong] -> [CULLong] #-}
 getRuns'B :: (Num a, Num b, Eq a) => b -> [a] -> [b]
 getRuns'B n (1:xs) = n : getRunsB        xs
 getRuns'B n (_:xs) =     getRuns'B (n+1) xs
 getRuns'B _  _     = []
 
 
--- addPosition :: (CULLong, CULLong)                                              -- ^ (position, value)
---             -> Map CULLong ((CULLong,CULLong,CULLong,CULLong,CULLong),[(CULLong,CULLong,CULLong,CULLong,CULLong)]) -- ^ Map Value (last input position, list of its previous runs)
---             -> Map CULLong ((CULLong,CULLong,CULLong,CULLong,CULLong),[(CULLong,CULLong,CULLong,CULLong,CULLong)]) -- ^ Map Value (new  input position, list of its previous runs)
-addPosition :: (Ord k0, Eq a, Num a) => (a, k0)
-                                     -> Map k0 ((a, a, a, a, a), [(a, a, a, a, a)])
-                                     -> Map k0 ((a, a, a, a, a), [(a, a, a, a, a)])
+-- | Add a position to the `Map`
+addPosition :: (Ord k0, Eq a, Num a) => (a, k0)                                      -- ^ (position, value)
+                                     -> Map k0 ((a, a, a, a, a), [(a, a, a, a, a)])  -- ^ Map Value (last input position, list of its previous runs)
+                                     -> Map k0 ((a, a, a, a, a), [(a, a, a, a, a)])  -- ^ Map Value (new  input position, list of its previous runs)
 addPosition (position, value) posMap = Map.insertWith posValInsert value ((position,0,0,0,0),[]) posMap
 
 
-
+-- | Abbrev. to make it easier to make the code generic
 type Vec2 = ContVec 2
+
+-- | Abbrev. to make it easier to make the code generic
 type Vec4 = ContVec 4
+
+-- | Abbrev. to make it easier to make the code generic
 type Vec5 = ContVec 5
 
 
@@ -215,15 +227,11 @@ addPosition' position value posMap = Map.insertWith posValInsert' value (mk5 pos
 posValInsert :: (Eq a, Num a) => ((a,a,a,a,a),[(a,a,a,a,a)]) ->
                                  ((a,a,a,a,a),[(a,a,a,a,a)]) ->
                                  ((a,a,a,a,a),[(a,a,a,a,a)])
-
 posValInsert ((pos6,_,_,_,_),_) ((pos1,pos2,pos3,pos4,pos5), pastRuns) = if newRun `elem` pastRuns || 0 `elem` [pos1,pos2,pos3,pos4,pos5,pos6]
                                                                             then (positions,          pastRuns)
                                                                             else (positions, newRun : pastRuns)
   where
-    -- newRun    :: (CULLong, CULLong, CULLong, CULLong, CULLong)
     newRun    = (pos2-pos1,pos3-pos2,pos4-pos3,pos5-pos4,pos6-pos5)
-
-    -- positions :: (CULLong, CULLong, CULLong, CULLong, CULLong)
     positions = (pos2     ,pos3     ,pos4     ,pos5     ,pos6     )
 
 
@@ -239,11 +247,8 @@ posValInsert' ~((x :: Vec5 a), _) ~(y, zs) = if any (FV.and . FV.zipWith (==) ne
     newRun    = FV.zipWith (-) positions y -- Vec5
 
 
-
-
-
 -- | Print the resulting `Map`
-printMap :: forall a1 a b c. (Show b, Show c) => (a1, Map b (a, [(c, c, c, c, c)])) -> IO ()
+printMap :: (Show b, Show c) => (a1, Map b (a, [(c, c, c, c, c)])) -> IO ()
 printMap = putStrLn . showTreeWith (\k x -> show (k, snd x)) True False . snd
 
 -- | Print the resulting `Map`, specialized to `Vec5`'s instead of tuples
@@ -258,7 +263,6 @@ printMap' = (putStrLn . showTreeWith (\k ~(_, xs) -> show (k, FV.toList <$> xs))
 
 
 -- | The initial state of the stream
--- {-# SPECIALIZE theStream :: (Bits a1, Num a1, Enum a1) => ([(CULLong, CULLong)], Map a1 a1) #-}
 theStream :: (Enum a, Enum b, Num b, Bits b, Num a) => ([(a, b)], Map k v)
 theStream = (, Map.empty) . zip [1..] . lock getRuns . differences . lock onlyGapless $ [1..]
   where
@@ -266,7 +270,6 @@ theStream = (, Map.empty) . zip [1..] . lock getRuns . differences . lock onlyGa
     lock = id
 
 -- | Print every nth value of the stream, specialized to the following value (it's an infinite loop, so the return value simply encodes which types the algorithm is specialized to).
--- {-# SPECIALIZE printEveryNOfStream :: Int -> IO ([(CULLong, CULLong)], Map CULLong ((CULLong, CULLong, CULLong, CULLong, CULLong), [(CULLong, CULLong, CULLong, CULLong, CULLong)])) #-}
 printEveryNOfStream :: (Eq a, Bits k0, Num k0, Num a, Enum k0, Enum a, Ord k0, Show k0, Show a) =>
      Int -> IO ([(a, k0)], Map k0 ((a, a, a, a, a), [(a, a, a, a, a)]))
 printEveryNOfStream n = printEveryN (foldlOnce addPosition) n theStream
@@ -277,7 +280,6 @@ printEveryNOfStream' :: (Eq a, Bits k0, Num k0, Num a, Enum k0, Enum a, Ord k0, 
 printEveryNOfStream' n = printEveryN (foldlOnce (uncurry addPosition')) n theStream
 
 
--- returnEveryN :: Int -> IO ([(CULLong, CULLong)], Map CULLong ((CULLong, CULLong, CULLong, CULLong, CULLong), [(CULLong, CULLong, CULLong, CULLong, CULLong)]))
 -- | See `printEveryNOfStream`, except is uses `sideEffectEveryN` instead of `printEveryN`
 returnEveryN :: (Eq c, Show b, Show c, Ord b, Enum c, Enum b, Num c, Num b, Bits b) => Int -- ^ How often
              -> IO ([(c, b)], Map b ((c, c, c, c, c), [(c, c, c, c, c)])) -- ^ Results from `theStream`
@@ -289,14 +291,11 @@ returnEveryN' :: (Eq a2, Enum a2, Num a2, Bits a1, Enum a1, Num a1, Ord a1, Show
 returnEveryN' n = sideEffectEveryN printMap' (foldlOnce (uncurry addPosition')) n theStream
 
 
-
 -- get runs of 1's, 4^n's
 -- drop runs of 1's
 -- return runs of 4^n's as maximum power (Int)
 -- put positions of n's into map
 -- convert list of positions into runs of 5 (7)?
 -- nub the runs
-
-
 
 
