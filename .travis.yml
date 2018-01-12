@@ -53,6 +53,11 @@ matrix:
   # - env: BUILD=cabal GHCVER=7.10.3 CABALVER=1.22 HAPPYVER=1.19.5 ALEXVER=3.1.7
   #   compiler: ": #GHC 7.10.3"
   #   addons: {apt: {packages: [cabal-install-1.22,ghc-7.10.3,happy-1.19.5,alex-3.1.7], sources: [hvr-ghc]}}
+  # removed due to:
+  # No output has been received in the last 10m0s, this potentially indicates a stalled build or something wrong with the build itself.
+  # Check the details on how to adjust your build configuration on: https://docs.travis-ci.com/user/common-build-problems/#Build-times-out-because-no-output-was-received
+  # The build has been terminated
+
   # - env: BUILD=cabal GHCVER=8.0.2 CABALVER=1.24 HAPPYVER=1.19.5 ALEXVER=3.1.7
   #   compiler: ": #GHC 8.0.2"
   #   addons: {apt: {packages: [cabal-install-1.24,ghc-8.0.2,happy-1.19.5,alex-3.1.7], sources: [hvr-ghc]}}
@@ -72,21 +77,45 @@ matrix:
     compiler: ": #stack default"
     addons: {apt: {packages: [libgmp-dev]}}
 
-#   - env: BUILD=stack ARGS="--resolver lts-2"
-#     compiler: ": #stack 7.8.4"
-#     addons: {apt: {packages: [libgmp-dev]}}
+  # Error: While constructing the build
+  # plan, the following exceptions were
+  # encountered:
+  # In the dependencies
+  # for stream-timers-0.1.0.0:
+  #     containers-0.5.5.1 from stack
+  #                        configuration
+  #                        does not
+  #                        match >=0.5.9
+  #                        (latest matching
+  #                        version
+  #                        is 0.5.10.2)
+  # needed since stream-timers is a build
+  # target.
+  # - env: BUILD=stack ARGS="--resolver lts-2"
+  #   compiler: ": #stack 7.8.4"
+  #   addons: {apt: {packages: [libgmp-dev]}}
 
+# All the below failed with Nats
+# /home/travis/build/michaeljklein/stream-timers/src/Data/Timers/Example.hs:196:21: error:
+#     • Expected a type, but
+#       ‘2’ has kind
+#       ‘ghc-prim-0.5.0.0:GHC.Types.Nat’
+#     • In the first argument of ‘ContVec’, namely ‘2’
+#       In the type ‘ContVec 2’
+#       In the type declaration for ‘Vec2’
+#
 #   - env: BUILD=stack ARGS="--resolver lts-3"
 #     compiler: ": #stack 7.10.2"
 #     addons: {apt: {packages: [libgmp-dev]}}
-
+#
 #   - env: BUILD=stack ARGS="--resolver lts-6"
 #     compiler: ": #stack 7.10.3"
 #     addons: {apt: {packages: [libgmp-dev]}}
-
+#
 #   - env: BUILD=stack ARGS="--resolver lts-7"
 #     compiler: ": #stack 8.0.1"
 #     addons: {apt: {packages: [libgmp-dev]}}
+#
 
 #   - env: BUILD=stack ARGS="--resolver lts-9"
 #     compiler: ": #stack 8.0.2"

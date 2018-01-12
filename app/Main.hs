@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Main where
 
 import Data.Timers.Example
@@ -8,9 +10,9 @@ main :: IO ()
 main = do
   args <- getArgs
   let arg = if null args
-              then error "No arguements passed! Please provide a somewhat large number."
+              then error "No arguments passed! Please provide a somewhat large number."
               else read (head args)
   returns <- returnEveryN arg
-  print $ returns
+  print $ (returns :: ([(Integer, Int)], Map Int ((Integer, Integer, Integer, Integer, Integer), [(Integer, Integer, Integer, Integer, Integer)])))
 
 
