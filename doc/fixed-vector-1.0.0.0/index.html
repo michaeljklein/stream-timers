@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>fixed-vector-1.0.0.0: Generic vectors with statically known size.</title><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean" /><script src="haddock-util.js" type="text/javascript"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script><script type="text/javascript">//<![CDATA[
+window.onload = function () {pageLoad();};
+//]]>
+</script></head><body><div id="package-header"><ul class="links" id="page-menu"><li><a href="index.html">Contents</a></li><li><a href="doc-index.html">Index</a></li></ul><p class="caption">fixed-vector-1.0.0.0: Generic vectors with statically known size.</p></div><div id="content"><div id="description"><h1>fixed-vector-1.0.0.0: Generic vectors with statically known size.</h1><div class="doc"><p>Generic library for vectors with statically known
+size. Implementation is based on
+<a href="http://unlines.wordpress.com/2010/11/15/generics-for-small-fixed-size-vectors/">http://unlines.wordpress.com/2010/11/15/generics-for-small-fixed-size-vectors/</a>
+Same functions could be used to work with both ADT based vector like</p><pre>data Vec3 a = a a a</pre><p>Tuples are vectors too:</p><pre class="screen"><code class="prompt">&gt;&gt;&gt; </code><strong class="userinput"><code>sum (1,2,3)
+</code></strong>6
+</pre><p>Vectors which are represented internally by arrays are provided by
+library. Both boxed and unboxed arrays are supported.</p><p>Library is structured as follows:</p><ul><li>Data.Vector.Fixed
+Generic API. It's suitable for both ADT-based vector like Complex
+and array-based ones.</li><li>Data.Vector.Fixed.Cont
+Continuation based vectors. Internally all functions use them.</li><li>Data.Vector.Fixed.Mutable
+Type classes for array-based implementation and API for working with
+mutable state.</li><li>Data.Vector.Fixed.Unboxed
+Unboxed vectors.</li><li>Data.Vector.Fixed.Boxed
+Boxed vector which can hold elements of any type.</li><li>Data.Vector.Fixed.Storable
+Unboxed vectors of Storable  types.</li><li>Data.Vector.Fixed.Primitive
+Unboxed vectors based on pritimive package.</li></ul></div></div><div id="module-list"><p class="caption">Signatures</p></div><div id="module-list"><p class="caption">Modules</p><ul><li><span id="control.n.1" class="module collapser" onclick="toggleSection('n.1')">Data</span><ul id="section.n.1" class="show"><li><span id="control.n.1.1" class="module collapser" onclick="toggleSection('n.1.1')">Vector</span><ul id="section.n.1.1" class="show"><li><span class="module"><span id="control.n.1.1.1" class="collapser" onclick="toggleSection('n.1.1.1')">&nbsp;</span><a href="Data-Vector-Fixed.html">Data.Vector.Fixed</a></span><ul id="section.n.1.1.1" class="show"><li><span class="module"><a href="Data-Vector-Fixed-Boxed.html">Data.Vector.Fixed.Boxed</a></span></li><li><span class="module"><a href="Data-Vector-Fixed-Cont.html">Data.Vector.Fixed.Cont</a></span></li><li><span class="module"><a href="Data-Vector-Fixed-Generic.html">Data.Vector.Fixed.Generic</a></span></li><li><span class="module"><a href="Data-Vector-Fixed-Mutable.html">Data.Vector.Fixed.Mutable</a></span></li><li><span class="module"><a href="Data-Vector-Fixed-Primitive.html">Data.Vector.Fixed.Primitive</a></span></li><li><span class="module"><a href="Data-Vector-Fixed-Storable.html">Data.Vector.Fixed.Storable</a></span></li><li><span class="module"><a href="Data-Vector-Fixed-Unboxed.html">Data.Vector.Fixed.Unboxed</a></span></li></ul></li></ul></li></ul></li></ul></div></div><div id="footer"><p>Produced by <a href="http://www.haskell.org/haddock/">Haddock</a> version 2.18.1</p></div></body></html>

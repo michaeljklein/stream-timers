@@ -73,7 +73,7 @@ instance GHC.Base.Monad Data.Expire.ExpireE
 instance GHC.Base.Applicative Data.Expire.Expire
 instance GHC.Base.Monad Data.Expire.Expire
 
-module Timers
+module Data.Timers
 
 -- | <a>foldrOnce</a> applies a right fold, only once (for streams,
 --   primarily).
@@ -292,31 +292,31 @@ switchEvery' :: (UTCTime, Integer, Int, IO t5 -> IO (IO t5), t5 -> IO (IO t5), I
 --   could look like.
 switchEvery'' :: (Integral t4, Integral t6) => (UTCTime, t6, t4, t7 -> IO t7, t5 -> IO t7, IO t5) -> IO (UTCTime, t6, Int, t7 -> IO t7, t5 -> IO t7, t7)
 
-module Lib
+module Data.Timers.Example
 
--- | <a>CULLong</a>
-type ULL = CULLong
-
--- | <a>Map</a> type alias
-type Map = Map
+-- | A Map from keys <tt>k</tt> to values <tt>a</tt>.
+data Map k a :: * -> * -> *
 
 -- | Mystery function... (read the source)
-gapless :: ULL -> Bool
+gapless :: (Bits t, Num t) => t -> Bool
 
 -- | Helper function to <a>gapless</a>
-gapless' :: ULL -> Bool
+gapless' :: (Bits t, Num t) => t -> Bool
 
 -- | Are <a>gapless</a> and <a>gapless'</a> equal?
-gaplessEq :: ULL -> Bool
+gaplessEq :: (Bits a, Num a) => a -> Bool
 
 -- | Number of <a>gapless</a> numbers in <tt>[1..n]</tt>
-countGapless :: Num a => ULL -> a
+countGapless :: (Bits a, Enum a, Num a, Num b) => a -> b
 
 -- | Number of <a>gapless'</a> numbers in <tt>[1..n]</tt>
-countGapless' :: Num a => ULL -> a
+countGapless' :: (Bits a, Enum a, Num a, Num b) => a -> b
 
 -- | What it says on the box
-nextGapless :: ULL -> ULL
+nextGapless :: (Bits a, Num a) => a -> a
+
+-- | Convert a list of lists to a list of Mathematica lists.
+toMathematica :: Show a => [[a]] -> String
 
 -- | One-liner to export gapless to mathematica:
 --   
@@ -325,7 +325,11 @@ nextGapless :: ULL -> ULL
 --   </pre>
 --   
 --   See <tt>only_gapless.md</tt>
-onlyGapless :: [ULL] -> [ULL]
+onlyGapless :: (Bits t, Num t) => [t] -> [t]
+
+-- | <a>onlyGapless</a>, differences, grouped, then converted to
+--   Mathematica lists. {--}
+onlyGaplessMathematica :: (Bits t, Num t, Show t) => [t] -> String
 
 -- | First differences:
 --   
@@ -334,25 +338,92 @@ onlyGapless :: [ULL] -> [ULL]
 --   </pre>
 differences :: Num a => [a] -> [a]
 
+-- | Should be equivalent to <a>differences</a>
+differences_ :: Num a => [a] -> [a]
+
+-- | Compare <a>differences</a> and <a>differences_</a>, specialized for
+--   testing
+prop_differences_ :: [Int] -> Bool
+
 -- | Warning, this function is incomplete.
-getRuns :: [ULL] -> [ULL]
+--   
+--   <pre>
+--   λ&gt; take 10 . getRuns . repeat $ 0 == _|_
+--   λ&gt; take 10 . getRuns . repeat $ 1 == _|_
+--   λ&gt; take 10 . getRuns . cycle $ [0] == _|_
+--   λ&gt; take 10 . getRuns . cycle $ [1] == _|_
+--   λ&gt; take 10 . getRuns . cycle $ [0,0] == _|_
+--   λ&gt; take 10 . getRuns . cycle $ [0,1] == [1,1,1,1,1,1,1,1,1,1]
+--   λ&gt; take 10 . getRuns . cycle $ [1,0] == [1,1,1,1,1,1,1,1,1,1]
+--   λ&gt; take 10 . getRuns . cycle $ [1,1] == _|_
+--   λ&gt; take 10 . getRuns . cycle $ [0,0,0] == _|_
+--   λ&gt; take 10 . getRuns . cycle $ [0,0,1] == [2,2,2,2,2,2,2,2,2,2]
+--   λ&gt; take 10 . getRuns . cycle $ [0,1,0] == [1,2,2,2,2,2,2,2,2,2]
+--   λ&gt; take 10 . getRuns . cycle $ [0,1,1] == [1,1,1,1,1,1,1,1,1,1]
+--   λ&gt; take 10 . getRuns . cycle $ [1,0,0] == [2,2,2,2,2,2,2,2,2,2]
+--   λ&gt; take 10 . getRuns . cycle $ [1,0,1] == [1,1,1,1,1,1,1,1,1,1]
+--   λ&gt; take 10 . getRuns . cycle $ [1,1,0] == [1,1,1,1,1,1,1,1,1,1]
+--   λ&gt; take 10 . getRuns . cycle $ [1,1,1]
+--   </pre>
+--   
+--   It's a fun autamata, note that it must be passed an infinite list, or
+--   else it'll hit an exception. Even then, on some infinite lists, it'll
+--   loop forever without printing (if it never hits 1's).
+getRuns :: (Num a, Num b, Eq a) => [a] -> [b]
 
 -- | A "match [] first" version of <a>getRuns</a>
-getRunsA :: [ULL] -> [ULL]
+getRunsA :: (Num a, Num b, Eq a) => [a] -> [b]
 
 -- | A "match [] last" version of <a>getRuns</a>
-getRunsB :: [ULL] -> [ULL]
+getRunsB :: (Num a, Num b, Eq a) => [a] -> [b]
 
 -- | Warning, this function is incomplete.
-getRuns' :: ULL -> [ULL] -> [ULL]
+getRuns' :: (Num a, Num b, Eq a) => b -> [a] -> [b]
 
 -- | A "match [] first" version of <a>getRuns'</a>
-getRuns'A :: ULL -> [ULL] -> [ULL]
+getRuns'A :: (Num a, Num b, Eq a) => b -> [a] -> [b]
 
 -- | A "match [] last" version of <a>getRuns'</a>
-getRuns'B :: ULL -> [ULL] -> [ULL]
-addPosition :: (ULL, ULL) -> Map ULL ((ULL, ULL, ULL, ULL, ULL), [(ULL, ULL, ULL, ULL, ULL)]) -> Map ULL ((ULL, ULL, ULL, ULL, ULL), [(ULL, ULL, ULL, ULL, ULL)])
-theStream :: ([(ULL, ULL)], Map k a1)
-printMap :: forall a1 a. (a1, Map ULL (a, [(ULL, ULL, ULL, ULL, ULL)])) -> IO ()
-printEveryNOfStream :: Int -> IO ([(ULL, ULL)], Map ULL ((ULL, ULL, ULL, ULL, ULL), [(ULL, ULL, ULL, ULL, ULL)]))
-returnEveryN :: Int -> IO ([(ULL, ULL)], Map ULL ((ULL, ULL, ULL, ULL, ULL), [(ULL, ULL, ULL, ULL, ULL)]))
+getRuns'B :: (Num a, Num b, Eq a) => b -> [a] -> [b]
+
+-- | Add a position to the <a>Map</a>
+addPosition :: (Ord k0, Eq a, Num a) => (a, k0) -> Map k0 ((a, a, a, a, a), [(a, a, a, a, a)]) -> Map k0 ((a, a, a, a, a), [(a, a, a, a, a)])
+
+-- | Abbrev. to make it easier to make the code generic
+type Vec2 = ContVec 2
+
+-- | Abbrev. to make it easier to make the code generic
+type Vec4 = ContVec 4
+
+-- | Abbrev. to make it easier to make the code generic
+type Vec5 = ContVec 5
+
+-- | A version of <a>addPosition</a> using <a>Vec5</a> instead of tuples
+addPosition' :: (Ord k0, Eq a, Num a) => a -> k0 -> Map k0 (Vec5 a, [Vec5 a]) -> Map k0 (Vec5 a, [Vec5 a])
+
+-- | The initial state of the stream
+theStream :: (Enum a, Enum b, Num b, Bits b, Num a) => ([(a, b)], Map k v)
+
+-- | Print the resulting <a>Map</a>
+printMap :: (Show b, Show c) => (a1, Map b (a, [(c, c, c, c, c)])) -> IO ()
+
+-- | Print the resulting <a>Map</a>, specialized to <a>Vec5</a>'s instead
+--   of tuples
+printMap' :: (Show a0, Show a2) => (a, Map a0 (a1, [Vec5 a2])) -> IO ()
+
+-- | Print every nth value of the stream, specialized to the following
+--   value (it's an infinite loop, so the return value simply encodes which
+--   types the algorithm is specialized to).
+printEveryNOfStream :: (Eq a, Bits k0, Num k0, Num a, Enum k0, Enum a, Ord k0, Show k0, Show a) => Int -> IO ([(a, k0)], Map k0 ((a, a, a, a, a), [(a, a, a, a, a)]))
+
+-- | <a>printEveryNOfStream</a>, secialized to <a>ContVec</a>'s and using
+--   <a>addPosition'</a>
+printEveryNOfStream' :: (Eq a, Bits k0, Num k0, Num a, Enum k0, Enum a, Ord k0, Show (ContVec 5 a), Show k0, Show a) => Int -> IO ([(a, k0)], Map k0 (Vec5 a, [Vec5 a]))
+
+-- | See <a>printEveryNOfStream</a>, except is uses <a>sideEffectEveryN</a>
+--   instead of <a>printEveryN</a>
+returnEveryN :: (Eq c, Show b, Show c, Ord b, Enum c, Enum b, Num c, Num b, Bits b) => Int -> IO ([(c, b)], Map b ((c, c, c, c, c), [(c, c, c, c, c)]))
+
+-- | A version of <a>returnEveryN</a> using <a>addPosition'</a> and
+--   <a>printMap'</a>
+returnEveryN' :: (Eq a2, Enum a2, Num a2, Bits a1, Enum a1, Num a1, Ord a1, Show a2, Show a1) => Int -> IO ([(a2, a1)], Map a1 (Vec5 a2, [ContVec 5 a2]))
